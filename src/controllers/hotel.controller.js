@@ -1,8 +1,8 @@
 import { asyncHandler } from "../Middleware/asyncHandler.js";
 
-const createRoom = asyncHandler(async(req,res)=>{
+const createHotel = asyncHandler(async(req,res)=>{
     
 
 })
 
-export {createRoom}
+export {createHotel}

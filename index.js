@@ -3,7 +3,7 @@ import "dotenv/config";
 import connectToDb from "./src/Database/db.js"; 
 import userRouter from "./src/routes/user.routes.js"
 import cookieParser from "cookie-parser";
-import roomRouter from "./src/routes/room.routes.js"
+import hotelRouter from "./src/routes/hotel.routes.js"
 const app = express();
 
 app.use(express.json());
@@ -15,7 +15,7 @@ app.use(cookieParser());
 app.use("/api/v1/user",userRouter)
 
 // Room Routes
-app.use("/api/v1/room",roomRouter)
+app.use("/api/v1/room",hotelRouter)
 
 
 
