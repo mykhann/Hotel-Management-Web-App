@@ -1,6 +1,7 @@
 import { asyncHandler } from "../Middleware/asyncHandler.js";
 import { uploadOnCloudinary } from "../Middleware/utils/cloudinary.js";
 import { Hotel } from "../Models/hotel.model.js";
+import mongoose from "mongoose";
 
 const createHotel = asyncHandler(async (req, res) => {
     const { name, location, description, phone, email } = req.body;
@@ -38,7 +39,7 @@ const createHotel = asyncHandler(async (req, res) => {
 const getAllHotels = asyncHandler(async (req, res) => {
 
     const hotels = await Hotel.find()
-    if (!hotels) {
+    if (!hotels.length === 0) {
         return res.status(404).json({
             success: false,
             message: "Hotels not found",
@@ -52,6 +53,29 @@ const getAllHotels = asyncHandler(async (req, res) => {
 
 // get hotel by ID
 
+const getHotelByID = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({
+            success: false,
+            message: "Invalid hotel ID",
+        });
+    }
+
+    const hotel = await Hotel.findById(id);
+
+    if (!hotel) {
+        return res.status(404).json({
+            success: false,
+            message: "Hotel not found",
+        });
+    }
+
+    return res.status(200).json({
+        success: true,
+        hotel
+    });
+});
 
 
-export { createHotel, getAllHotels };
+export { createHotel, getAllHotels, getHotelByID };
