@@ -34,4 +34,24 @@ const createHotel = asyncHandler(async (req, res) => {
     });
 });
 
-export { createHotel };
+// get all hotels 
+const getAllHotels = asyncHandler(async (req, res) => {
+
+    const hotels = await Hotel.find()
+    if (!hotels) {
+        return res.status(404).json({
+            success: false,
+            message: "Hotels not found",
+        });
+    };
+    return res.status(200).json({
+        success: true,
+        hotels
+    })
+})
+
+// get hotel by ID
+
+
+
+export { createHotel, getAllHotels };
