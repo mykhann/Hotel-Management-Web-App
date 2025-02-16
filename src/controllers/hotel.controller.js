@@ -100,7 +100,47 @@ const getHotelByID = asyncHandler(async (req, res) => {
     });
 });
 
+// Update Hotel Details
+const updateHotel = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    const { name, location, description, phone, email } = req.body;
+    const ownerId=req.user
+
+    // Find the hotel
+    let hotel = await Hotel.findById(id);
+    if (!hotel) {
+        return res.status(404).json({ success: false, message: "Hotel not found" });
+    }
+
+    // only hotel owner /admin can update the hotel info 
+
+    if (hotel.owner.toString() !== req.user._id.toString() && req.user.role !== "admin") {
+        return res.status(403).json({ success: false, message: "Not authorized to update this hotel" });
+    }
+
+    if (name) hotel.name = name;
+    if (location) hotel.location = location;
+    if (description) hotel.description = description;
+    if (phone) hotel.phone = phone;
+    if (email) hotel.email = email;
+
+    if (req.file) {
+        const result = await uploadOnCloudinary(req.file.buffer, `hotels/${Date.now()}-${req.file.originalname}`);
+        if (result.secure_url) {
+            hotel.images = [result.secure_url];
+        }
+    }
+
+    // Save the updated hotel
+    await hotel.save();
+
+    res.status(200).json({
+        success: true,
+        message: "Hotel updated successfully",
+        hotel
+    });
+});
 
 
 
-export { createHotel, getAllHotels, getHotelByID };
+export { createHotel, getAllHotels, getHotelByID, updateHotel };
