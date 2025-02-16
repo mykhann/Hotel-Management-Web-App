@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import { User } from "../Models/user.model.js";
 import jwt from "jsonwebtoken";
 import { asyncHandler } from "../Middleware/asyncHandler.js";
+import { isAuthenticated } from "../Middleware/isAuthenticated.middleware.js";
 
 const RegisterUser = asyncHandler(async (req, res) => {
     const { Fullname, email, password, phone, username } = req.body;
@@ -83,7 +84,7 @@ const LoginUser = asyncHandler(async (req, res) => {
 
     res.status(200).cookie("token", token, cookieOptions).json({
         success: true,
-        message: `Welcome back ${user.name}`,
+        // message: `Welcome back ${user.username}`,
         user,
         token
     });
@@ -100,7 +101,34 @@ const LogoutUser = asyncHandler(async (req, res) => {
         message: "Logged out successfully"
     });
 });
+const UpdateUser = asyncHandler(async (req, res) => {
+    const userId = req.user._id;
+    const source = req.body;
+
+    const user = await User.findById(userId);
+    if (!user) {
+        return res.status(404).json({
+            success: false,
+            message: "User not found",
+        })
+    }
+    if (source.Fullname) user.name = source.name;
+    if (source.email) user.email = source.email;
+    if (source.password) user.password = source.password;
+    if (source.phone) user.phone = source.phone;
+    if (source.username) user.phone = source.username;
+
+
+    await user.save();
+    res.status(200).json({
+        success: true,
+        message: "User updated successfully",
+        user
+    });
+
+})
 
 
 
-export { LoginUser, RegisterUser, LogoutUser };
+
+export { LoginUser, RegisterUser, LogoutUser, UpdateUser };
