@@ -5,9 +5,9 @@ import jwt from "jsonwebtoken";
 import { asyncHandler } from "../Middleware/asyncHandler.js";
 
 const RegisterUser = asyncHandler(async (req, res) => {
-    const { Fullname, email, password, phone,username } = req.body;
-    
-    if (!Fullname || !email || !password || !phone ||!username) {
+    const { Fullname, email, password, phone, username } = req.body;
+
+    if (!Fullname || !email || !password || !phone || !username) {
         return res.status(400).json({
             success: false,
             message: "Please enter all fields"
@@ -32,16 +32,16 @@ const RegisterUser = asyncHandler(async (req, res) => {
         phone
     });
 
-    res.status(200).json({ 
-        success: true, 
-        message: "User created successfully", 
-        user 
+    res.status(200).json({
+        success: true,
+        message: "User created successfully",
+        user
     });
 });
 
 const LoginUser = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
-    
+
     if (!email || !password) {
         return res.status(400).json({
             message: "Please enter all required fields",
@@ -72,7 +72,7 @@ const LoginUser = asyncHandler(async (req, res) => {
     });
 
     user = {
-        name: user.Fullname,  
+        name: user.Fullname,
         email: user.email
     };
 
@@ -89,4 +89,18 @@ const LoginUser = asyncHandler(async (req, res) => {
     });
 });
 
-export { LoginUser, RegisterUser };
+const LogoutUser = asyncHandler(async (req, res) => {
+    res.cookie("token", "", {
+        maxAge: 0,
+        httpOnly: true
+    });
+
+    res.status(200).json({
+        success: true,
+        message: "Logged out successfully"
+    });
+});
+
+
+
+export { LoginUser, RegisterUser, LogoutUser };
