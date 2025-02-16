@@ -15,7 +15,7 @@ const hotelSchema = new mongoose.Schema(
     description: {
       type: String,
     },
-    contact: {
+    
       phone: {
         type: String,
         required: true,
@@ -25,7 +25,7 @@ const hotelSchema = new mongoose.Schema(
         required: true,
         unique: true,
       },
-    },
+    
     rooms: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -46,5 +46,4 @@ const hotelSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-
-module.exports = mongoose.model("Hotel", hotelSchema);
+export const Hotel = mongoose.model("Hotel", hotelSchema)

@@ -15,7 +15,7 @@ app.use(cookieParser());
 app.use("/api/v1/user",userRouter)
 
 // Room Routes
-app.use("/api/v1/room",hotelRouter)
+app.use("/api/v1/hotel",hotelRouter)
 
 
 
