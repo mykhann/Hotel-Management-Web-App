@@ -1,45 +1,36 @@
 import mongoose from "mongoose";
-import "dotenv/config"
+import "dotenv/config";
 
 const userSchema = new mongoose.Schema({
-   
     email: {
         type: String,
         required: [true, "Please enter an email"],
-        unique: true
+        unique: true,
     },
     username: {
         type: String,
         required: [true, "Please enter username"],
-        unique: true
+        unique: true,
     },
     password: {
         type: String,
-        required: true
+        required: true,
     },
-    
     refreshToken: {
         type: String,
     },
     avatar: {
         type: String,
-       
     },
-    isAdmin:{
+    role: {
+        type: String,
+        enum: ["admin", "hotelOwner", "user"], 
+        default: "user",
+    },
+    isBan: {
         type: Boolean,
-        default: false
+        default: false,
     },
-    isHotelOwner:{
-        type:Boolean,
-        default: false
-    },
-    isBan:{
-        type:Boolean,
-        default: false
-    }
 }, { timestamps: true });
 
-
-
-
-export const User = mongoose.model("User", userSchema)
+export const User = mongoose.model("User", userSchema);
