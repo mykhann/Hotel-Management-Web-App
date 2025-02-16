@@ -10,10 +10,16 @@ const userSchema = new mongoose.Schema({
         required: [true, "Please enter an email"],
         unique: true
     },
+    username: {
+        type: String,
+        required: [true, "Please enter username"],
+        unique: true
+    },
     password: {
         type: String,
         required: true
     },
+    
     refreshToken: {
         type: String,
     },
