@@ -1,6 +1,4 @@
 import mongoose from "mongoose";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 import "dotenv/config"
 
 const userSchema = new mongoose.Schema({
@@ -31,7 +29,7 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    isOwner:{
+    isHotelOwner:{
         type:Boolean,
         default: false
     },
