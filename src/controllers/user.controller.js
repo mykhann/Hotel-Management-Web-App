@@ -5,6 +5,8 @@ import jwt from "jsonwebtoken";
 import { asyncHandler } from "../Middleware/asyncHandler.js";
 import { isAuthenticated } from "../Middleware/isAuthenticated.middleware.js";
 
+// User registration 
+
 const RegisterUser = asyncHandler(async (req, res) => {
     const { Fullname, email, password, phone, username } = req.body;
 
@@ -39,6 +41,8 @@ const RegisterUser = asyncHandler(async (req, res) => {
         user
     });
 });
+
+// User Login 
 
 const LoginUser = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
@@ -101,6 +105,9 @@ const LogoutUser = asyncHandler(async (req, res) => {
         message: "Logged out successfully"
     });
 });
+
+// User updating profile details 
+
 const UpdateUser = asyncHandler(async (req, res) => {
     const userId = req.user._id;
     const source = req.body;
