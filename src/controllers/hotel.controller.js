@@ -104,7 +104,7 @@ const getHotelByID = asyncHandler(async (req, res) => {
 const updateHotel = asyncHandler(async (req, res) => {
     const { id } = req.params;
     const { name, location, description, phone, email } = req.body;
-    const ownerId=req.user
+    
 
     // Find the hotel
     let hotel = await Hotel.findById(id);
@@ -141,6 +141,29 @@ const updateHotel = asyncHandler(async (req, res) => {
     });
 });
 
+// Delete hotel => only admin or hotel owner can delete 
+
+const DeleteHotel=asyncHandler(async(req,res)=>{
+
+    const {id}= req.params
+
+    let hotel = await Hotel.findById(id);
+    if (!hotel) {
+        return res.status(404).json({ success: false, message: "Hotel not found" });
+    }
+
+    if (hotel.owner.toString() !== req.user._id.toString() && req.user.role !== "admin") {
+        return res.status(403).json({ success: false, message: "Not authorized to delete this hotel" });
+    }
+
+    await hotel.deleteOne();
+    res.status(200).json({
+        success: true,
+        message: "Hotel deleted successfully",
+    });
 
 
-export { createHotel, getAllHotels, getHotelByID, updateHotel };
+})
+
+
+export { createHotel, getAllHotels, getHotelByID, updateHotel,DeleteHotel };
