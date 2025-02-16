@@ -133,9 +133,27 @@ const UpdateUser = asyncHandler(async (req, res) => {
         user
     });
 
+});
+
+const getProfileDetails= asyncHandler(async(req,res)=>{
+    const userId= req.user._id;
+    
+    // finding user 
+    const user= await User.findById(userId).select("-password");
+    if (!user){
+        return res.status(404).json({
+            success: false,
+            message: "User not found"
+        });
+    }
+
+    // returning user details 
+    return res.status(200).json(user);
+
+
 })
 
 
 
 
-export { LoginUser, RegisterUser, LogoutUser, UpdateUser };
+export { LoginUser, RegisterUser, LogoutUser, UpdateUser,getProfileDetails };
