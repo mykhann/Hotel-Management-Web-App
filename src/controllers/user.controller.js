@@ -1,0 +1,102 @@
+
+import express from "express"
+import bcrypt from "bcrypt"
+import { User } from "../Models/user.model.js";
+import jwt from "jsonwebtoken"
+const RegisterUser = async (req, res) => {
+    const { Fullname, email, password, phone } = req.body;
+    if (!Fullname || !email || !password || !phone) {
+        return res.status(400).json({
+            success: false,
+            message: "please enter all fields"
+        });
+    };
+
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+        return res.status(400).json({
+            success: false,
+            message: "User already exists"
+        });
+    };
+
+    const securePass = await bcrypt.hash(password, 10)
+
+
+
+    const user = await User.create({
+        Fullname: Fullname,
+        email: email,
+        password: securePass,
+        phone: phone,
+
+
+    })
+
+    res.status(200).json({ success: true, message: "user created successfully", user });
+
+
+
+
+
+}
+const LoginUser = async (req,res) => {
+    const { email, password } = req.body;
+    if (!email || !password) {
+        return res.status(400).json({
+            message: "please enter all required fields",
+            success: false,
+        });
+    };
+
+    let user = await User.findOne({ email })
+    if (!user) {
+        return res.status(404).json({
+            message: "please enter the correct credentials",
+            success: false,
+        });
+    };
+
+    const correctPassword = await bcrypt.compare(password, user.password);
+ 
+    if (!correctPassword){
+        return res.status(403).json({
+            message:" Please enter the correct credentials",
+            success:false
+        });
+    };
+
+    // JWT TOKEN 
+    const tokenData= {userID: user._id}
+    const token= jwt.sign(tokenData,process.env.ACCESS_TOKEN_SECRET,{
+        expiresIn: process.env.ACCESS_TOKEN_EXPIRY
+
+    });
+
+    user={
+        name:user.name,
+        email:user.email,
+        
+    }
+    const cookieOptions = {
+        maxAge: 24 * 60 * 60 * 1000,
+        httpOnly: true,
+
+    }
+
+    res.status(200).cookie("token", token, cookieOptions).json({
+        success: true,
+        message: `Welcome back ${user.name}`,
+        user,
+        token
+
+    })
+
+
+
+
+};
+
+
+
+export { LoginUser, RegisterUser }
