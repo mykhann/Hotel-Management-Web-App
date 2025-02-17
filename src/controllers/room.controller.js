@@ -2,6 +2,7 @@ import { Room } from "../Models/room.model.js";
 import { Hotel } from "../Models/hotel.model.js";
 import { asyncHandler } from "../Middleware/asyncHandler.js";
 import { uploadOnCloudinary } from "../Middleware/utils/cloudinary.js";
+import mongoose from "mongoose"
 
 
 
@@ -61,20 +62,31 @@ const AddRoom = asyncHandler(async (req, res) => {
 
 });
 
-const getAllRooms = asyncHandler(async (req, res) => {
-    const { hotelId } = req.params
+// get rooms from a specific hotel 
+
+const getAllHotelRooms = asyncHandler(async (req, res) => {
+    const { hotelId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(hotelId)) {
+        return res.status(400).json({
+            success: false,
+            message: "Invalid hotel ID"
+        });
+    }
+
     const rooms = await Room.find({ hotel: hotelId });
 
-    if (!rooms.length) {
+    if (!rooms || rooms.length === 0) {
         return res.status(404).json({
             success: false,
-            message: "Room not found",
-        })
+            message: "No rooms found for this hotel"
+        });
     }
+
     res.status(200).json({
         success: true,
         rooms
-    })
+    });
 
 });
 
@@ -82,38 +94,61 @@ const getAllRooms = asyncHandler(async (req, res) => {
 
 const getRoomById = asyncHandler(async (req, res) => {
     const { roomId } = req.params;
-    const room = await Room.findById(roomId).populate("hotel");
+
+    if (!mongoose.Types.ObjectId.isValid(roomId)) {
+        return res.status(400).json({ success: false, message: "Invalid room ID" });
+    }
+    
+    const room = await Room.findById(roomId).populate("hotel", "name location"); 
+    
+    
     if (!room) {
         return res.status(404).json({ success: false, message: "Room not found" });
     }
+
     res.status(200).json({ success: true, room });
 });
 
-const deleteRoomById=asyncHandler(async(req,res)=>{
+const deleteRoomById = asyncHandler(async (req, res) => {
     const { roomId } = req.params;
-    const userId = req.user.id; 
-    const userRole = req.user.role; 
+    const userId = req.user.id;
+    const userRole = req.user.role;
 
     // Find the room and its associated hotel
     const room = await Room.findById(roomId);
     if (!room) {
-      return res.status(404).json({ message: "Room not found." });
+        return res.status(404).json({ message: "Room not found." });
     }
 
     // Fetch hotel to check ownership
     const hotel = await Hotel.findById(room.hotel);
     if (!hotel) {
-      return res.status(404).json({ message: "Hotel not found." });
+        return res.status(404).json({ message: "Hotel not found." });
     }
 
     // Authorization check: Only admin or hotel owner can delete
     if (userRole !== "admin" && hotel.owner.toString() !== userId) {
-      return res.status(403).json({success:false, message: "Unauthorized: You cannot delete this room." });
+        return res.status(403).json({ success: false, message: "Unauthorized: You cannot delete this room." });
     }
 
     await Room.findByIdAndDelete(roomId);
-    res.status(200).json({ success:true,message: "Room deleted successfully." });
+    res.status(200).json({ success: true, message: "Room deleted successfully." });
 
 })
 
-export { AddRoom,getAllRooms,getRoomById,deleteRoomById }
+// get all rooms from all hotels 
+const getAllRooms = asyncHandler(async (req, res) => {
+    const rooms = await Room.find().populate("hotel", "name location")
+
+    if (!rooms.length) {
+        return res.status(404).json({ success: false, message: "No rooms found." });
+    }
+
+    res.status(200).json({
+        success: true,
+        rooms
+
+    })
+
+})
+export { AddRoom, getAllHotelRooms, deleteRoomById,getAllRooms,getRoomById }
