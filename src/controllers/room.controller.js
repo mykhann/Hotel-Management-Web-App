@@ -98,10 +98,10 @@ const getRoomById = asyncHandler(async (req, res) => {
     if (!mongoose.Types.ObjectId.isValid(roomId)) {
         return res.status(400).json({ success: false, message: "Invalid room ID" });
     }
-    
-    const room = await Room.findById(roomId).populate("hotel", "name location"); 
-    
-    
+
+    const room = await Room.findById(roomId).populate("hotel", "name location");
+
+
     if (!room) {
         return res.status(404).json({ success: false, message: "Room not found" });
     }
@@ -138,17 +138,56 @@ const deleteRoomById = asyncHandler(async (req, res) => {
 
 // get all rooms from all hotels 
 const getAllRooms = asyncHandler(async (req, res) => {
-    const rooms = await Room.find().populate("hotel", "name location")
+    const rooms = await Room.find();
 
-    if (!rooms.length) {
-        return res.status(404).json({ success: false, message: "No rooms found." });
+    if (!rooms || rooms.length === 0) {
+        return res.status(404).json({
+            success: false,
+            message: "No rooms found."
+        });
     }
 
     res.status(200).json({
         success: true,
         rooms
-
-    })
-
+    });
 })
-export { AddRoom, getAllHotelRooms, deleteRoomById,getAllRooms,getRoomById }
+
+const updateRoom = asyncHandler(async (req, res) => {
+    const { roomId } = req.params;
+    const { roomNumber, type, price, amenities, capacity, description } = req.body;
+
+
+    // Find the room
+    let room = await Room.findById(roomId);
+    if (!room) {
+        return res.status(404).json({ success: false, message: "Room not found" });
+    }
+
+    // only hotel owner /admin can update the room info 
+
+
+    if (roomNumber) room.roomNumber = roomNumber;
+    if (type) room.type = type;
+    if (price) room.price = price;
+    if (amenities) room.amenities = amenities;
+    if (capacity) room.capacity = capacity;
+    if (description) room.description = description;
+
+    if (req.file) {
+        const result = await uploadOnCloudinary(req.file.buffer, `hotels/${Date.now()}-${req.file.originalname}`);
+        if (result.secure_url) {
+            room.images = [result.secure_url];
+        }
+    }
+
+    // Save the updated room
+    await room.save();
+
+    res.status(200).json({
+        success: true,
+        message: "room updated successfully",
+        room
+    });
+})
+export { AddRoom, getAllHotelRooms, deleteRoomById, getAllRooms, getRoomById, updateRoom }
