@@ -1,6 +1,7 @@
 import { asyncHandler } from "../Middleware/asyncHandler.js";
 import { Room } from "../Models/room.model.js";
 import { Booking } from "../Models/booking.model.js";
+import mongoose from "mongoose";
 
 const createBooking = asyncHandler(async (req, res) => {
     const { roomId } = req.params;
@@ -98,31 +99,60 @@ const cancelBooking = asyncHandler(async (req, res) => {
     const { bookingId } = req.params;
     const userId = req.user.id;
     const userRole = req.user.role;
-    // Find the booking
-    const booking = await Booking.findById(bookingId);
 
-    if (!booking) {
-        return res.status(404).json({
+    // Validate booking ID format
+    if (!mongoose.Types.ObjectId.isValid(bookingId)) {
+        return res.status(400).json({
             success: false,
-            message: "Booking not found",
+            message: "Invalid booking ID",
         });
     }
 
-    // Check if the user is an admin or the owner of the booking
-    if (userRole !== "admin" && booking.user.toString() !== userId) {
-        return res.status(403).json({
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
+    try {
+        // Find the booking
+        const booking = await Booking.findById(bookingId).session(session);
+        if (!booking) {
+            await session.abortTransaction();
+            session.endSession();
+            return res.status(404).json({
+                success: false,
+                message: "Booking not found",
+            });
+        }
+
+        // Check authorization
+        if (userRole !== "admin" && booking.user.toString() !== userId) {
+            await session.abortTransaction();
+            session.endSession();
+            return res.status(403).json({
+                success: false,
+                message: "Access denied. You are not authorized to cancel this booking.",
+            });
+        }
+
+        // Delete the booking
+        await Booking.findByIdAndDelete(bookingId).session(session);
+
+        await session.commitTransaction();
+        session.endSession();
+
+        res.status(200).json({
+            success: true,
+            message: "Booking canceled successfully",
+        });
+
+    } catch (error) {
+        await session.abortTransaction();
+        session.endSession();
+        res.status(500).json({
             success: false,
-            message: "Access denied. You are not authorized to cancel this booking.",
+            message: "Failed to cancel booking",
+            error: error.message,
         });
     }
-
-    // Delete the booking
-    await Booking.findByIdAndDelete(bookingId);
-
-    res.status(200).json({
-        success: true,
-        message: "Booking canceled successfully",
-    });
 });
 
 export { createBooking, getBookingById,cancelBooking };
