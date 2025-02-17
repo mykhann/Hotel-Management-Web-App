@@ -4,6 +4,7 @@ import connectToDb from "./src/Database/db.js";
 import userRouter from "./src/routes/user.routes.js"
 import hotelRouter from "./src/routes/hotel.routes.js"
 import roomRouter from "./src/routes/room.routes.js"
+import bookingRouter from "./src/routes/booking.routes.js"
 import cookieParser from "cookie-parser";
 const app = express();
 
@@ -17,8 +18,12 @@ app.use("/api/v1/user",userRouter)
 
 // Room Routes
 app.use("/api/v1/room",roomRouter)
+
 // Hotel Routes
 app.use("/api/v1/hotel",hotelRouter)
+
+// Booking Routes
+app.use("/api/v1/booking",bookingRouter)
 
 
 
