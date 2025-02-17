@@ -65,4 +65,64 @@ const createBooking = asyncHandler(async (req, res) => {
     });
 });
 
-export { createBooking };
+const getBookingById = asyncHandler(async (req, res) => {
+    const { bookingId } = req.params;
+    const userId = req.user.id;
+    const userRole = req.user.role;
+
+    // Find the booking and populate the user and room details
+    const booking = await Booking.findById(bookingId).populate("user", "name email");
+
+    if (!booking) {
+        return res.status(404).json({
+            success: false,
+            message: "Booking not found",
+        });
+    }
+
+    // Check if the user is an admin or the owner of the booking
+    if (userRole !== "admin" && booking.user._id.toString() !== userId) {
+        return res.status(403).json({
+            success: false,
+            message: "Access denied. You are not authorized to view this booking.",
+        });
+    }
+
+    res.status(200).json({
+        success: true,
+        booking,
+    });
+});
+
+const cancelBooking = asyncHandler(async (req, res) => {
+    const { bookingId } = req.params;
+    const userId = req.user.id;
+    const userRole = req.user.role;
+    // Find the booking
+    const booking = await Booking.findById(bookingId);
+
+    if (!booking) {
+        return res.status(404).json({
+            success: false,
+            message: "Booking not found",
+        });
+    }
+
+    // Check if the user is an admin or the owner of the booking
+    if (userRole !== "admin" && booking.user.toString() !== userId) {
+        return res.status(403).json({
+            success: false,
+            message: "Access denied. You are not authorized to cancel this booking.",
+        });
+    }
+
+    // Delete the booking
+    await Booking.findByIdAndDelete(bookingId);
+
+    res.status(200).json({
+        success: true,
+        message: "Booking canceled successfully",
+    });
+});
+
+export { createBooking, getBookingById,cancelBooking };
