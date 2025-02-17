@@ -1,52 +1,55 @@
 import { asyncHandler } from "../Middleware/asyncHandler.js";
-import { Hotel } from "../Models/hotel.model.js";
 import { Room } from "../Models/room.model.js";
-import mongoose from "mongoose";
 import { Booking } from "../Models/booking.model.js";
 
 const createBooking = asyncHandler(async (req, res) => {
-    const { checkInDate, checkOutDate } = req.body;
     const { roomId } = req.params;
+    const { checkInDate, checkOutDate } = req.body;
     const userId = req.user.id;
-    const userRole = req.user.role;
 
-    if (!mongoose.Types.ObjectId.isValid(roomId)) {
-        return res.status(400).json({ success: false, message: "Invalid room ID" });
-    }
+    const checkIn = new Date(checkInDate);
+    const checkOut = new Date(checkOutDate);
 
-    // Find the room to check if it's available
-    const room = await Room.findById(roomId).populate("hotel");
+    // Find the room by its ID and populate the hotel name
+    const room = await Room.findById(roomId).populate("hotel", "name");
     if (!room) {
-        return res.status(404).json({ success: false, message: "Room not found" });
+        return res.status(404).json({
+            success: false,
+            message: "Room not found",
+        });
     }
 
-    // Check if room is already booked
-    if (room.isBooked) {
-        return res.status(400).json({ success: false, message: "Room is already booked" });
+    // Check if the room is already booked for the selected dates
+    const conflictingBooking = await Booking.findOne({
+        room: roomId,
+        $or: [
+            { checkInDate: { $lt: checkOut }, checkOutDate: { $gt: checkIn } },
+        ],
+    });
+
+    if (conflictingBooking) {
+        return res.status(400).json({
+            success: false,
+            message: "Room is already booked for the selected dates",
+        });
     }
 
-    // Find the hotel to associate with booking
-    const hotel = await Hotel.findById(room.hotel);
-    if (!hotel) {
-        return res.status(404).json({ success: false, message: "Hotel not found" });
-    }
+    // Calculate the total price based on room price
+    const daysDifference = Math.ceil((checkOut - checkIn) / (1000 * 3600 * 24));
+    const totalPrice = room.price * daysDifference;
 
-    const totalPrice = room.price;
     // Create a new booking
-    const newBooking = new Booking({
+    const booking = new Booking({
         user: userId,
         room: roomId,
-        hotel: hotel._id,   
-        checkInDate,
-        checkOutDate,
-        totalPrice,
-        status: "pending",
-        createdBy: userRole === "admin" || userRole === "hotelOwner" ? userId : null,
+        hotel: room.hotel._id,
+        checkInDate: checkInDate,
+        checkOutDate: checkOutDate,
+        totalPrice: totalPrice,
     });
 
     // Save the booking
-    await newBooking.save();
-
+    await booking.save();
 
     room.isBooked = true;
     await room.save();
@@ -54,9 +57,12 @@ const createBooking = asyncHandler(async (req, res) => {
     res.status(201).json({
         success: true,
         message: "Booking created successfully",
-        booking: newBooking,
+        booking: {
+            ...booking.toObject(),
+            roomNumber: room.roomNumber,
+        },
+        hotelName: room.hotel.name,
     });
 });
 
-
-export { createBooking }
+export { createBooking };
