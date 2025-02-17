@@ -5,6 +5,7 @@ import userRouter from "./src/routes/user.routes.js"
 import hotelRouter from "./src/routes/hotel.routes.js"
 import roomRouter from "./src/routes/room.routes.js"
 import bookingRouter from "./src/routes/booking.routes.js"
+import adminRouter from "./src/routes/admin.routes.js"
 import cookieParser from "cookie-parser";
 const app = express();
 
@@ -24,6 +25,10 @@ app.use("/api/v1/hotel",hotelRouter)
 
 // Booking Routes
 app.use("/api/v1/booking",bookingRouter)
+
+// admin Routes 
+app.use("/api/v1/admin",adminRouter)
+
 
 
 

@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import { User } from "../Models/user.model.js";
+import { asyncHandler } from "./asyncHandler.js";
 
 const isAuthenticated = async (req, res, next) => {
     try {
@@ -32,5 +33,7 @@ const isAuthenticated = async (req, res, next) => {
         });
     }
 };
+
+
 
 export { isAuthenticated };
