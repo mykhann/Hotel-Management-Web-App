@@ -155,4 +155,54 @@ const cancelBooking = asyncHandler(async (req, res) => {
     }
 });
 
-export { createBooking, getBookingById,cancelBooking };
+// Hotel owner / admin can update the status 
+const updateBooking = asyncHandler(async (req, res) => {
+    const { bookingId } = req.params;
+    const { status } = req.body;
+    const userId = req.user.id;
+    const userRole = req.user.role;
+
+ 
+    if (!mongoose.Types.ObjectId.isValid(bookingId)) {
+        return res.status(400).json({
+            success: false,
+            message: "Invalid booking ID",
+        });
+    }
+
+
+    const booking = await Booking.findById(bookingId).populate("hotel", "owner");
+    if (!booking) {
+        return res.status(404).json({
+            success: false,
+            message: "Booking not found",
+        });
+    }
+
+    if (userRole !== "admin" && booking.hotel.owner.toString() !== userId) {
+        return res.status(403).json({
+            success: false,
+            message: "Access denied. You are not authorized to update this booking.",
+        });
+    }
+
+    const validStatuses = ["pending", "confirmed", "cancelled", "completed"];
+    if (!validStatuses.includes(status)) {
+        return res.status(400).json({
+            success: false,
+            message: "Invalid status. Allowed values are: pending, confirmed, cancelled, completed.",
+        });
+    }
+
+    // Update the booking status
+    booking.status = status;
+    await booking.save();
+
+    res.status(200).json({
+        success: true,
+        message: "Booking status updated successfully",
+        booking,
+    });
+});
+
+export { createBooking, getBookingById,cancelBooking ,updateBooking};

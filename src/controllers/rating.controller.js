@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+
 import { Booking } from "../Models/booking.model.js";
 import { Hotel } from "../Models/hotel.model.js";
 import { Rating } from "../Models/rating.model.js";

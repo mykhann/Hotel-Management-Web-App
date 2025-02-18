@@ -1,11 +1,12 @@
 import { Router } from "express";
 import { isAuthenticated } from "../Middleware/isAuthenticated.middleware.js";
-import { cancelBooking, createBooking, getBookingById } from "../controllers/booking.controller.js";
+import { cancelBooking, createBooking, getBookingById, updateBooking } from "../controllers/booking.controller.js";
 const router= new Router();
 
 router.post("/:roomId",isAuthenticated,createBooking)
 router.get("/getroom/:bookingId",isAuthenticated,getBookingById)
 router.delete("/cancel-booking/:bookingId",isAuthenticated,cancelBooking)
+router.put("/update-booking/:bookingId",isAuthenticated,updateBooking)
 
 
 export default router;
