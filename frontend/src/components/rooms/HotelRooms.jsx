@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setHotelRooms } from "../../reduxStore/HotelSlice";
+import {  setSingleHotelRoom } from "../../reduxStore/HotelSlice";
 import Navbar from "../shared/Navbar";
 import Footer from "../layout/Footer";
-import { FaWifi, FaTv, FaSnowflake, FaUtensils, FaParking } from "react-icons/fa";
+import {
+  FaWifi,
+  FaTv,
+  FaSnowflake,
+  FaUtensils,
+  FaParking,
+} from "react-icons/fa";
 
 const HotelRooms = () => {
   const { hotelId } = useParams();
@@ -13,6 +19,8 @@ const HotelRooms = () => {
   const [groupedRooms, setGroupedRooms] = useState({});
   const [selectedImages, setSelectedImages] = useState({});
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchRooms = async () => {
       try {
@@ -20,7 +28,7 @@ const HotelRooms = () => {
           `http://localhost:5500/api/v1/room/get/${hotelId}`
         );
         const data = await response.json();
-        dispatch(setHotelRooms(data.rooms));
+        dispatch(setSingleHotelRoom(data.rooms));
 
         const grouped = data.rooms.reduce((acc, room) => {
           if (!acc[room.type]) acc[room.type] = [];
@@ -78,39 +86,22 @@ const HotelRooms = () => {
                 {rooms.map((room) => (
                   <div
                     key={room._id}
-                    className="bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 relative"
+                    className="bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
                   >
-                    {/* Price and Amenities at the Top Right */}
-                    <div className="absolute top-4 right-4 text-right">
-                      <p className="text-yellow-400 font-bold text-lg">
-                        ${room.price} / night
-                      </p>
-                      <div className="flex gap-2 mt-2">
-                        {room.amenities?.length > 0 ? (
-                          room.amenities.slice(0, 4).map((amenity, index) => (
-                            <div key={index} className="text-xl">
-                              {amenityIcons[amenity.toLowerCase()] || (
-                                <span className="text-gray-400 text-sm">
-                                  {amenity}
-                                </span>
-                              )}
-                            </div>
-                          ))
-                        ) : (
-                          <span className="text-gray-400 text-sm">No amenities</span>
-                        )}
-                      </div>
-                    </div>
-
                     <div className="flex flex-col md:flex-row gap-6">
+                      {/* Image Section */}
                       <div className="w-full md:w-2/3">
                         <img
-                          src={selectedImages[room._id] || "https://source.unsplash.com/600x400/?room"}
+                          src={
+                            selectedImages[room._id] ||
+                            "https://source.unsplash.com/600x400/?room"
+                          }
                           alt={room.name}
-                          className="w-full h-80 object-cover rounded-lg" 
+                          className="w-full h-80 object-cover rounded-lg"
                         />
                       </div>
 
+                      {/* Thumbnail Images */}
                       <div className="w-full md:w-1/3 flex flex-wrap md:flex-col gap-2">
                         {room.images?.slice(0, 5).map((image, index) => (
                           <img
@@ -134,7 +125,36 @@ const HotelRooms = () => {
                         {room.name}
                       </h2>
                       <p className="text-gray-300 mt-2">{room.description}</p>
-                      <button className="mt-4 bg-yellow-400 text-gray-900 px-6 py-2 rounded-lg font-semibold hover:bg-yellow-500 transition-colors duration-200">
+
+                      {/* Price Section */}
+                      <p className="text-yellow-400 font-bold text-lg mt-4">
+                        ${room.price} / night
+                      </p>
+
+                      {/* Amenities Section */}
+                      <div className="flex gap-4 mt-2">
+                        {room.amenities?.length > 0 ? (
+                          room.amenities.slice(0, 4).map((amenity, index) => (
+                            <div key={index} className="text-xl">
+                              {amenityIcons[amenity.toLowerCase()] || (
+                                <span className="text-gray-400 text-sm">
+                                  {amenity}
+                                </span>
+                              )}
+                            </div>
+                          ))
+                        ) : (
+                          <span className="text-gray-400 text-sm">
+                            No amenities
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Book Now Button */}
+                      <button
+                        onClick={() => navigate(`/book/${room._id}`)}
+                        className="mt-4 bg-yellow-400 text-gray-900 px-6 py-2 rounded-lg font-semibold hover:bg-yellow-500 transition-colors duration-200"
+                      >
                         Book Now
                       </button>
                     </div>
