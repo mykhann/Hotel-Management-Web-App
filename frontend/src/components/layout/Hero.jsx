@@ -6,7 +6,7 @@ const Hero = () => {
     <section className="relative flex items-center justify-center h-screen bg-gray-900 text-white overflow-hidden">
       {/* Background Image */}
       <img
-        src="/hotel-bg.jpg" // hotel background image
+        src="/hotel-bg.jpg" 
         alt="Luxury Hotel"
         className="absolute inset-0 w-full h-full object-cover opacity-80"
       />
@@ -20,9 +20,9 @@ const Hero = () => {
           Experience unparalleled luxury and comfort at our world-class hotel. Your perfect getaway starts here.
         </p>
         <div className="flex flex-col md:flex-row items-center justify-center gap-4">
-          <Link to="/doctors"> 
+          <Link to="/hotels"> 
             <button className="bg-teal-500 hover:bg-teal-600 text-white px-6 py-3 rounded-lg shadow-lg hover:scale-105 transition-transform text-lg font-semibold">
-              Explore Rooms
+              Explore Hotels
             </button>
           </Link>
           <Link to="/about"> 

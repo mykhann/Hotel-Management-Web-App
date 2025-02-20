@@ -15,6 +15,7 @@ import { NextUIProvider } from "@nextui-org/react";
 import EditProfile from "./components/profile/EditProfile";
 import AboutPage from "./components/layout/AboutPage";
 import HotelList from "./components/Hotel/HotelList";
+import HotelRooms from "./components/rooms/HotelRooms";
 
 // Error Boundary Component
 const ErrorPage = () => {
@@ -35,6 +36,7 @@ const router = createBrowserRouter([
   { path: "/profile", element: <ProfilePage />, errorElement: <ErrorPage /> },
   { path: "/about", element: <AboutPage />, errorElement: <ErrorPage /> },
   { path: "/hotels", element: <HotelList />, errorElement: <ErrorPage /> },
+  { path: `/rooms/:hotelId`, element: <HotelRooms />, errorElement: <ErrorPage /> }
 ]);
 
 function App() {
