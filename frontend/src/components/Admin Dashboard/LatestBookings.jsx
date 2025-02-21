@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import moment from "moment";
 
 const LatestBookings = () => {
   const [bookings, setBookings] = useState([]);
@@ -28,6 +29,11 @@ const LatestBookings = () => {
     fetchBookings();
   }, []);
 
+  // Function to calculate how many days ago a booking was made
+  const getTimeAgo = (dateString) => {
+    return moment(dateString).fromNow(); 
+  };
+
   return (
     <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
       <h2 className="text-xl font-semibold text-white mb-4">Latest Bookings</h2>
@@ -40,10 +46,8 @@ const LatestBookings = () => {
         <ul className="space-y-3">
           {bookings.map((booking) => (
             <li key={booking._id} className="flex items-center justify-between bg-gray-700 p-3 rounded-lg">
-              <span className="text-white">📅 {booking.user?.name} -  {booking.room?.type} Room ({booking.room?.hotel?.name})</span>
-              <span className="text-sm text-gray-400">
-                {new Date(booking.createdAt).toLocaleDateString()}
-              </span>
+              <span className="text-white">📅 {booking.user?.name} - {booking.room?.type} Room ({booking.room?.hotel?.name})</span>
+              <span className="text-sm text-gray-400">{getTimeAgo(booking.createdAt)}</span>
             </li>
           ))}
         </ul>
