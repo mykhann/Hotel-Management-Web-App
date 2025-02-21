@@ -18,6 +18,8 @@ import HotelList from "./components/Hotel/HotelList";
 import HotelRooms from "./components/rooms/HotelRooms";
 import BookRoom from "./components/rooms/BookRoom";
 import BookingHistory from "./components/profile/BookingHistory";
+import AdminDashboard from "./components/Admin Dashboard/AdminDashboard";
+import AddHotel from "./components/Admin Dashboard/AddHotel";
 
 // Error Boundary Component
 const ErrorPage = () => {
@@ -35,6 +37,8 @@ const ErrorPage = () => {
 };
 
 const router = createBrowserRouter([
+  // Profile components 
+
   { path: "/", element: <Home />, errorElement: <ErrorPage /> },
   { path: "/login", element: <Login />, errorElement: <ErrorPage /> },
   { path: "/signup", element: <Signup />, errorElement: <ErrorPage /> },
@@ -44,6 +48,10 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   { path: "/profile", element: <ProfilePage />, errorElement: <ErrorPage /> },
+  { path: "/profile/bookings", element: <BookingHistory />, errorElement: <ErrorPage /> },
+
+  // Hotel & rooms component 
+
   { path: "/about", element: <AboutPage />, errorElement: <ErrorPage /> },
   { path: "/hotels", element: <HotelList />, errorElement: <ErrorPage /> },
   {
@@ -52,7 +60,14 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   { path: "/book/:roomId", element: <BookRoom />, errorElement: <ErrorPage /> },
-  { path: "/profile/bookings", element: <BookingHistory />, errorElement: <ErrorPage /> },
+
+  // Admin Dashboard 
+  { path: "/admin", element: <AdminDashboard />, errorElement: <ErrorPage /> },
+  { path: "/admin/add-hotel", element: <AddHotel />, errorElement: <ErrorPage /> },
+  { path: "/admin/view-hotels", element: <HotelList />, errorElement: <ErrorPage /> },
+
+
+
 ]);
 
 function App() {

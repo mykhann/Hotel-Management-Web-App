@@ -1,86 +1,130 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FaPlus } from "react-icons/fa";
-import { FaUserDoctor, FaUsersViewfinder } from "react-icons/fa6";
-import { FaSignOutAlt } from "react-icons/fa";
-import LatestDoctors from "./LatestDoctors";
-import LatestAppointments from "./LatestAppointments";
-import { useDispatch, useSelector } from "react-redux";
+import { FaPlus, FaHotel, FaUsers, FaClipboardList, FaDoorOpen, FaSignOutAlt } from "react-icons/fa";
 import { setUser } from "../../reduxStore/authSlice";
-import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
 
 const AdminDashboard = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const {doctors=[]}=useSelector(store=>store.doctors)
-  const {appointmentsAdmin=[]}=useSelector(store=>store.appointments)
+  const hotels= useSelector((store)=>store.hotel.hotels)
 
-  const handleLogout = async () => {
+
+  const {user}= useSelector((store)=>store.auth);
+  const navigate=useNavigate()
+  const dispatch= useDispatch()
+  const handleLogout=()=>{
     dispatch(setUser(null));
     navigate("/login");
-    toast.success("Logged out successfully");
-  };
-
+    toast.success("Logged out successfully")
+  }
   return (
-    <div className="bg-gradient-to-r from-blue-900 to-gray-900 min-h-screen">
-      <div className="flex justify-between items-center p-4">
-        <h1 className="text-5xl text-white font-extrabold mx-auto -mt-2">
-          Admin Dashboard
+    <div className="bg-gray-900 min-h-screen p-6">
+      {/* Header */}
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl md:text-4xl font-bold text-white">
+           Admin Dashboard
         </h1>
-        <button
-          onClick={handleLogout}
-          className="flex items-center bg-red-600 text-white mr-4 px-4 h-10 py-2 rounded-lg hover:bg-red-700 transition duration-300"
-        >
-          <FaSignOutAlt className="mr-2 w-6 h-6" />
+        <button onClick={handleLogout} className="flex items-center bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition duration-300">
+          <FaSignOutAlt className="mr-2" />
+          Logout
         </button>
       </div>
 
-      <div className="flex flex-col md:flex-row">
-        <div className="flex-1 p-6 lg:p-8 overflow-auto">
-          {/* Adjust margin to move cards higher */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6 -mt-9">
-            {/* Add Doctor Card */}
-            <Link to="/admin/add-doctor">
-              <div className="flex flex-col bg-green-200 text-green-900 p-6 shadow-lg hover:shadow-2xl transition duration-300 transform hover:scale-105">
-                <FaPlus className="text-5xl mb-4 self-center text-green-700" />
-                <h2 className="text-2xl font-extrabold text-center">
-                  Add Doctor
-                </h2>
-                <p className="text-lg text-center mt-1">Add a new Doctor</p>
-              </div>
-            </Link>
-
-            {/* View Doctors Card */}
-            <Link to="/admin/view-doctors">
-              <div className="flex flex-col bg-blue-200 text-blue-900 p-6  shadow-lg hover:shadow-2xl transition duration-300 transform hover:scale-105">
-                <FaUserDoctor className="text-5xl mb-4 self-center text-blue-700" />
-                <h2 className="text-2xl font-extrabold text-center">Doctors ({doctors?.length})</h2>
-                <p className="text-lg text-center mt-1">
-                  Manage and track all Doctors.
-                </p>
-              </div>
-            </Link>
-
-            {/* All Appointments Card */}
-            <Link to="/admin/view-appointments">
-              <div className="flex flex-col bg-red-200 text-red-900 p-6  shadow-lg hover:shadow-2xl transition duration-300 transform hover:scale-105">
-                <FaUsersViewfinder className="text-5xl mb-4 self-center text-red-700" />
-                <h2 className="text-2xl font-extrabold text-center">
-                  All Appointments ({appointmentsAdmin.length})
-                </h2>
-                <p className="text-lg text-center mt-1">
-                  View all appointments for all doctors
-                </p>
-              </div>
-            </Link>
+      {/* Admin Options Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
+        {/* Add Hotel Card */}
+        <Link to="/admin/add-hotel">
+          <div className="bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-2xl transition duration-300 transform hover:scale-105">
+            <div className="flex flex-col items-center text-center">
+              <FaPlus className="text-4xl text-green-500 mb-4" />
+              <h2 className="text-xl font-semibold text-white">Add Hotel</h2>
+              <p className="text-sm text-gray-400 mt-1">Register a new hotel</p>
+            </div>
           </div>
+        </Link>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Latest Doctors Table */}
-            <LatestDoctors />
-            {/* Latest Appointments Table */}
-            <LatestAppointments />
+        {/* View All Hotels Card */}
+        <Link to="/admin/view-hotels">
+          <div className="bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-2xl transition duration-300 transform hover:scale-105">
+            <div className="flex flex-col items-center text-center">
+              <FaHotel className="text-4xl text-blue-500 mb-4" />
+              <h2 className="text-xl font-semibold text-white">All Hotels ({hotels.length})</h2>
+              <p className="text-sm text-gray-400 mt-1">Manage all registered hotels</p>
+            </div>
           </div>
+        </Link>
+
+        {/* View All Users Card */}
+        <Link to="/admin/view-users">
+          <div className="bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-2xl transition duration-300 transform hover:scale-105">
+            <div className="flex flex-col items-center text-center">
+              <FaUsers className="text-4xl text-yellow-500 mb-4" />
+              <h2 className="text-xl font-semibold text-white">All Users (50)</h2>
+              <p className="text-sm text-gray-400 mt-1">View and manage users</p>
+            </div>
+          </div>
+        </Link>
+
+        {/* View All Bookings Card */}
+        <Link to="/admin/view-bookings">
+          <div className="bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-2xl transition duration-300 transform hover:scale-105">
+            <div className="flex flex-col items-center text-center">
+              <FaClipboardList className="text-4xl text-red-500 mb-4" />
+              <h2 className="text-xl font-semibold text-white">All Bookings (30)</h2>
+              <p className="text-sm text-gray-400 mt-1">View and manage bookings</p>
+            </div>
+          </div>
+        </Link>
+
+        {/* View All Rooms Card */}
+        <Link to="/admin/view-rooms">
+          <div className="bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-2xl transition duration-300 transform hover:scale-105">
+            <div className="flex flex-col items-center text-center">
+              <FaDoorOpen className="text-4xl text-purple-500 mb-4" />
+              <h2 className="text-xl font-semibold text-white">All Rooms (80)</h2>
+              <p className="text-sm text-gray-400 mt-1">View and manage hotel rooms</p>
+            </div>
+          </div>
+        </Link>
+      </div>
+
+      {/* Admin Dashboard Sections */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Latest Hotels Table */}
+        <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
+          <h2 className="text-xl font-semibold text-white mb-4">Latest Hotels</h2>
+          <ul className="space-y-3">
+            <li className="flex items-center justify-between bg-gray-700 p-3 rounded-lg">
+              <span className="text-white">🏨 Grand Palace - New York</span>
+              <span className="text-sm text-gray-400">Added 2 days ago</span>
+            </li>
+            <li className="flex items-center justify-between bg-gray-700 p-3 rounded-lg">
+              <span className="text-white">🏨 The Lux - California</span>
+              <span className="text-sm text-gray-400">Added 5 days ago</span>
+            </li>
+            <li className="flex items-center justify-between bg-gray-700 p-3 rounded-lg">
+              <span className="text-white">🏨 Paradise Inn - Miami</span>
+              <span className="text-sm text-gray-400">Added 1 week ago</span>
+            </li>
+          </ul>
+        </div>
+
+        {/* Latest Bookings Table */}
+        <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
+          <h2 className="text-xl font-semibold text-white mb-4">Latest Bookings</h2>
+          <ul className="space-y-3">
+            <li className="flex items-center justify-between bg-gray-700 p-3 rounded-lg">
+              <span className="text-white">📅 John Doe - Room 201 (Grand Palace)</span>
+              <span className="text-sm text-gray-400">2 days ago</span>
+            </li>
+            <li className="flex items-center justify-between bg-gray-700 p-3 rounded-lg">
+              <span className="text-white">📅 Jane Smith - Room 305 (The Lux)</span>
+              <span className="text-sm text-gray-400">3 days ago</span>
+            </li>
+            <li className="flex items-center justify-between bg-gray-700 p-3 rounded-lg">
+              <span className="text-white">📅 Michael Johnson - Room 110 (Paradise Inn)</span>
+              <span className="text-sm text-gray-400">5 days ago</span>
+            </li>
+          </ul>
         </div>
       </div>
     </div>
