@@ -39,13 +39,13 @@ const AdminDashboard = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
         {/* Add Hotel Card */}
         <Link to="/admin/add-hotel">
-          <div className="bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-2xl transition duration-300 transform hover:scale-105">
-            <div className="flex flex-col items-center text-center">
-              <FaPlus className="text-4xl text-green-500 mb-4" />
-              <h2 className="text-xl font-semibold text-white">Add Hotel</h2>
-              <p className="text-sm text-gray-400 mt-1">Register a new hotel</p>
-            </div>
-          </div>
+        <div className="bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-green-500/50 transition duration-300 transform hover:scale-105">
+        <div className="flex flex-col items-center text-center">
+          <FaPlus className="text-5xl text-green-500 mb-4 transition duration-300 hover:text-green-400" />
+          <h2 className="text-xl font-semibold text-white">Add Hotel</h2>
+          <p className="text-sm text-gray-400 mt-1">Register a new hotel</p>
+        </div>
+      </div>
         </Link>
 
         {/* View All Hotels Card */}

@@ -5,6 +5,8 @@ import Navbar from "../shared/Navbar";
 import Footer from "../layout/Footer";
 import { useSelector } from "react-redux";
 import useFetchAllHotels from "../../customHooks/useFetchAllHotels";
+import { toast } from "react-toastify"; // For better error/success notifications
+import axios from "axios"; // Import Axios
 
 const ITEMS_PER_PAGE = 10;
 
@@ -23,20 +25,22 @@ const HotelCard = () => {
     if (!window.confirm("Are you sure you want to delete this hotel?")) return;
 
     try {
-      const response = await fetch(`http://localhost:5500/api/v1/hotel/delete/${id}`, {
-        method: "DELETE",
-        credentials: "include",
-      });
+      const response = await axios.delete(
+        `http://localhost:5500/api/v1/hotel/delete/${id}`,
+        {
+          withCredentials: true, // Include credentials (cookies)
+        }
+      );
 
-      if (!response.ok) {
-        throw new Error("Failed to delete hotel");
+      if (response.data.success) {
+        toast.success(response.data.message); // Show success message
+        window.location.reload(); // Reload the page to reflect changes
+      } else {
+        throw new Error(response.data.message || "Failed to delete hotel");
       }
-
-      alert("Hotel deleted successfully!");
-      window.location.reload(); 
     } catch (error) {
       console.error("Error deleting hotel:", error);
-      alert("Error deleting hotel");
+      toast.error(error.response?.data?.message || "Error deleting hotel");
     }
   };
 
@@ -52,13 +56,12 @@ const HotelCard = () => {
             >
               {/* Admin Delete Button */}
               {user?.role === "admin" && (
-               <button
-               onClick={() => handleDelete(hotel._id)}
-               className="absolute top-2 right-2 bg-gradient-to-r from-red-500 to-red-700 text-white px-4 py-2 rounded-full text-xs shadow-lg transform transition-all duration-300 hover:scale-105 hover:shadow-red-600/50"
-             >
-               Delete
-             </button>
-             
+                <button
+                  onClick={() => handleDelete(hotel._id)}
+                  className="absolute top-2 right-2 bg-gradient-to-r from-red-500 to-red-700 text-white px-4 py-2 rounded-full text-xs shadow-lg transform transition-all duration-300 hover:scale-105 hover:shadow-red-600/50"
+                >
+                  Delete
+                </button>
               )}
 
               {/* Left Image Section */}

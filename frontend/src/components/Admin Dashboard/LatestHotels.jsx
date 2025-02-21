@@ -1,6 +1,8 @@
 import React from 'react'
 
 const LatestHotels = () => {
+
+    
   return (
     <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
     <h2 className="text-xl font-semibold text-white mb-4">Latest Hotels</h2>
