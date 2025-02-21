@@ -1,6 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../shared/Navbar";
-import { PhotoIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -13,31 +12,18 @@ const Signup = () => {
     email: "",
     password: "",
     phone: "",
-    avatar: null,
+    username: "",
   });
 
   const onchangeInputHandler = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
   };
 
-  const onchangeFileHandler = (e) => {
-    const avatar = e.target.files[0];
-    setInput((prevInput) => ({ ...prevInput, avatar }));
-  };
-
   const submitHandler = async (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    formData.append("name", input.name);
-    formData.append("email", input.email);
-    formData.append("password", input.password);
-    formData.append("phone", input.phone);
-    if (input.avatar) {
-      formData.append("avatar", input.avatar);
-    }
     try {
-      const res = await axios.post("http://localhost:8000/api/v1/users/register", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
+      const res = await axios.post("http://localhost:5500/api/v1/user/register", input, {
+        headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });
       if (res.data.success) {
@@ -58,22 +44,6 @@ const Signup = () => {
           <hr className="mb-6" />
           <form onSubmit={submitHandler}>
             <div className="mb-6">
-              <label className="relative flex items-center cursor-pointer">
-                <input
-                  type="file"
-                  name="avatar"
-                  onChange={onchangeFileHandler}
-                  className="sr-only"
-                  accept="image/*"
-                />
-                <span className="inline-flex items-center justify-center w-full p-3 border border-gray-200 rounded-lg bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white transition-all duration-300">
-                  <PhotoIcon className="h-6 w-6 mr-2" />
-                  Upload Avatar
-                </span>
-              </label>
-            </div>
-
-            <div className="mb-6">
               <input
                 type="text"
                 name="name"
@@ -92,6 +62,17 @@ const Signup = () => {
                 onChange={onchangeInputHandler}
                 value={input.email}
                 placeholder="Enter your email address"
+                className="mt-1 block w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                required
+              />
+            </div>
+            <div className="mb-6">
+              <input
+                type="text"
+                name="username"
+                onChange={onchangeInputHandler}
+                value={input.username}
+                placeholder="Enter your username"
                 className="mt-1 block w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 required
               />

@@ -36,7 +36,7 @@ const BookRoom = () => {
         toast.success('Room booked successfully!');
 
         // Save booking details in Redux
-        dispatch(setBooking(response.data.booking));
+        dispatch(setBooking(response.data.bookings));
 
         navigate('/profile/bookings');
       } else {

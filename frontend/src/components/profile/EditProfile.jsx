@@ -36,7 +36,7 @@ const EditProfile = () => {
     }
     try {
       const res = await axios.put(
-        "http://localhost:8000/api/v1/users/update-user",
+        "http://localhost:5500/api/v1/user/Update-Profile",
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },

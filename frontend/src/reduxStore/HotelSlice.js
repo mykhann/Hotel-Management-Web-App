@@ -7,7 +7,9 @@
             singleHotel: null,
             hotelRooms: [],
             singleHotelRoom:null,
-            booking:null
+            bookings:[],
+          
+
         },
         reducers: {
             setHotels: (state, action) => {
@@ -20,11 +22,11 @@
                 state.hotelRooms = action.payload;
             },
             setBooking:(state,action)=>{
-                state.booking=action.payload
+                state.bookings=action.payload
             },
             setSingleHotelRoom:(state,action)=>{
                 state.singleHotelRoom = action.payload
-            }
+            },
         }
     });
 
