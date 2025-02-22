@@ -4,7 +4,7 @@ import { FaUsers } from "react-icons/fa";
 import { useSelector } from "react-redux";
 
 const AllUsers = () => {
-  const users = useSelector((store) => store.auth.users) || []; // Ensure it's an array
+  const users = useSelector((store) => store.auth.users) || []; 
 
   return (
     <Link to="/admin/view-users">

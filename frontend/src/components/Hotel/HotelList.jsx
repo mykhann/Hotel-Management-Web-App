@@ -5,8 +5,8 @@ import Navbar from "../shared/Navbar";
 import Footer from "../layout/Footer";
 import { useSelector } from "react-redux";
 import useFetchAllHotels from "../../customHooks/useFetchAllHotels";
-import { toast } from "react-toastify"; // For better error/success notifications
-import axios from "axios"; // Import Axios
+import { toast } from "react-toastify"; 
+import axios from "axios"; 
 
 const ITEMS_PER_PAGE = 10;
 

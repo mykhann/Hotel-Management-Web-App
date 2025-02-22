@@ -20,6 +20,8 @@ import BookRoom from "./components/rooms/BookRoom";
 import BookingHistory from "./components/profile/BookingHistory";
 import AdminDashboard from "./components/Admin Dashboard/AdminDashboard";
 import AddHotel from "./components/Admin Dashboard/AddHotel";
+import FetchAllusers from "./components/Admin Dashboard/FetchAllusers";
+import FetchAllAdminBookings from "./components/Admin Dashboard/FetchAllAdminBookings";
 
 // Error Boundary Component
 const ErrorPage = () => {
@@ -65,6 +67,8 @@ const router = createBrowserRouter([
   { path: "/admin", element: <AdminDashboard />, errorElement: <ErrorPage /> },
   { path: "/admin/add-hotel", element: <AddHotel />, errorElement: <ErrorPage /> },
   { path: "/admin/view-hotels", element: <HotelList />, errorElement: <ErrorPage /> },
+  { path: "/admin/view-users", element: <FetchAllusers />, errorElement: <ErrorPage /> },
+  { path: "/admin/view-bookings", element: <FetchAllAdminBookings />, errorElement: <ErrorPage /> },
 
 
 
