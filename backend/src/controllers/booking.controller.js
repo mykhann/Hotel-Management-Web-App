@@ -2,6 +2,7 @@ import { asyncHandler } from "../Middleware/asyncHandler.js";
 import { Room } from "../Models/room.model.js";
 import { Booking } from "../Models/booking.model.js";
 import mongoose from "mongoose";
+import { Hotel } from "../Models/hotel.model.js";
 
 const createBooking = asyncHandler(async (req, res) => {
     const { roomId } = req.params;
@@ -225,8 +226,39 @@ const getUserBookings = asyncHandler(async (req, res) => {
         success: true,
         bookings,
     });
+
+    
+});
+const getHotelBookings = asyncHandler(async (req, res) => {
+    const userId = req.user.id;
+
+    // Find the hotel owned by the logged-in user
+    const hotel = await Hotel.findOne({ owner: userId });
+
+    if (!hotel) {
+        return res.status(404).json({
+            success: false,
+            message: "No hotel found for this owner",
+        });
+    }
+
+    // Fetch bookings for the hotel
+    const bookings = await Booking.find({ hotel: hotel._id })
+        .populate("user", "name email")
+        .populate("room", "type price");
+
+    if (!bookings.length) {
+        return res.status(404).json({
+            success: false,
+            message: "No bookings found for this hotel",
+        });
+    }
+
+    res.status(200).json({
+        success: true,
+        bookings,
+    });
 });
 
 
-
-export { createBooking, getBookingById,cancelBooking ,updateBooking,getUserBookings};
+export { createBooking, getBookingById,cancelBooking ,updateBooking,getUserBookings,getHotelBookings};

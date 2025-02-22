@@ -1,24 +1,54 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { FaPlus, FaDoorOpen, FaBook, FaHotel } from "react-icons/fa";
-import LatestBookings from "../Admin Dashboard/LatestBookings";
-// import LatestHotels from "./LatestHotels";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
+import { FaPlus, FaDoorOpen, FaBook, FaHotel, FaSignOutAlt } from "react-icons/fa";
+import LatestHotelBookings from "./LatestHotelBookings";
 
 const HotelDashboard = () => {
-  const [rooms, setRooms] = useState([
-    { id: 1, name: "Room 101", type: "Single", status: "Available" },
-    { id: 2, name: "Room 102", type: "Double", status: "Occupied" },
-    { id: 3, name: "Room 103", type: "Suite", status: "Available" },
-  ]);
-
+  const [hotel, setHotel] = useState(null);
+  const [rooms, setRooms] = useState([]);
   const [bookings, setBookings] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
-  // Mock hotel data
-  const hotel = {
-    name: "Carlton Hotel",
-    location: "New York, USA",
-    image: "https://via.placeholder.com/150", 
+  useEffect(() => {
+    const fetchHotelInfo = async () => {
+      try {
+        const { data } = await axios.get("http://localhost:5500/api/v1/hotel/my-hotel", {
+          withCredentials: true, 
+        });
+        setHotel(data.hotel);
+        setRooms(data.rooms || []);
+        setBookings(data.bookings || []);
+      } catch (err) {
+        setError(err.response?.data?.message || "Failed to fetch hotel information");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchHotelInfo();
+  }, []);
+
+  // Logout Function
+  const handleLogout = async () => {
+    try {
+      await axios.post("http://localhost:5500/api/v1/auth/logout", {}, { withCredentials: true });
+      localStorage.removeItem("userToken"); 
+      navigate("/login");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
+
+  if (loading) {
+    return <div className="text-center text-white">Loading...</div>;
+  }
+
+  if (error) {
+    return <div className="text-center text-red-500">{error}</div>;
+  }
 
   return (
     <div className="bg-gradient-to-r from-blue-900 to-gray-900 min-h-screen">
@@ -26,15 +56,23 @@ const HotelDashboard = () => {
       <div className="flex items-center justify-between p-6 bg-gray-800">
         <div className="flex items-center">
           <img
-            src={hotel.image}
-            alt={hotel.name}
+            src={hotel?.images?.[0] || "https://via.placeholder.com/150"}
+            alt={hotel?.name || "Hotel"}
             className="w-16 h-16 rounded-full mr-4"
           />
           <div>
-            <h1 className="text-3xl font-bold text-white">{hotel.name}</h1>
-            <p className="text-sm text-gray-400">{hotel.location}</p>
+            <h1 className="text-3xl font-bold text-white">{hotel?.name || "Hotel Name"}</h1>
+            <p className="text-sm text-gray-400">{hotel?.location || "Location"}</p>
           </div>
         </div>
+
+        {/* Logout Button */}
+        <button
+          onClick={handleLogout}
+          className="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-lg flex items-center transition duration-300"
+        >
+          <FaSignOutAlt className="mr-2" /> Logout
+        </button>
       </div>
 
       {/* Hotel Options Grid */}
@@ -59,9 +97,7 @@ const HotelDashboard = () => {
                 <h2 className="text-xl font-semibold text-white">
                   All Rooms <span className="text-blue-400">({rooms.length})</span>
                 </h2>
-                <p className="text-sm text-gray-400 mt-1">
-                  View and manage rooms
-                </p>
+                <p className="text-sm text-gray-400 mt-1">View and manage rooms</p>
               </div>
             </div>
           </Link>
@@ -93,11 +129,8 @@ const HotelDashboard = () => {
 
         {/* Hotel Dashboard Sections */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Latest Hotels Table */}
-          {/* <LatestHotels /> */}
-
           {/* Latest Bookings Table */}
-          <LatestBookings />
+          <LatestHotelBookings />
         </div>
       </div>
     </div>

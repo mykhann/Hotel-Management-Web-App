@@ -61,7 +61,7 @@ const createHotel = asyncHandler(async (req, res) => {
 // get all hotels 
 const getAllHotels = asyncHandler(async (req, res) => {
 
-    const hotels = await Hotel.find().sort({createdAt:-1}).populate("owner", "name email")
+    const hotels = await Hotel.find().sort({ createdAt: -1 }).populate("owner", "name email")
     if (!hotels.length === 0) {
         return res.status(404).json({
             success: false,
@@ -104,7 +104,7 @@ const getHotelByID = asyncHandler(async (req, res) => {
 const updateHotel = asyncHandler(async (req, res) => {
     const { id } = req.params;
     const { name, location, description, phone, email } = req.body;
-    
+
 
     // Find the hotel
     let hotel = await Hotel.findById(id);
@@ -143,9 +143,9 @@ const updateHotel = asyncHandler(async (req, res) => {
 
 // Delete hotel => only admin or hotel owner can delete 
 
-const DeleteHotel=asyncHandler(async(req,res)=>{
+const DeleteHotel = asyncHandler(async (req, res) => {
 
-    const {id}= req.params
+    const { id } = req.params
 
     let hotel = await Hotel.findById(id);
     if (!hotel) {
@@ -165,5 +165,44 @@ const DeleteHotel=asyncHandler(async(req,res)=>{
 
 })
 
+// Get hotel info with owner details and images
+const getHotelInfo = asyncHandler(async (req, res) => {
+    let hotel;
 
-export { createHotel, getAllHotels, getHotelByID, updateHotel,DeleteHotel };
+    // Super user or admin can fetch hotel by ID
+    if (req.user.role === "admin" || req.user.role === "superuser") {
+        const { id } = req.params;
+
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid hotel ID",
+            });
+        }
+
+        hotel = await Hotel.findById(id).populate("owner", "name email");
+    } 
+    // Hotel owner can fetch only their hotel
+    else {
+        hotel = await Hotel.findOne({ owner: req.user._id }).populate("owner", "name email");
+    }
+
+    if (!hotel) {
+        return res.status(404).json({
+            success: false,
+            message: "Hotel not found",
+        });
+    }
+
+    return res.status(200).json({
+        success: true,
+        hotel
+    });
+});
+
+
+
+
+
+
+export { createHotel, getAllHotels, getHotelByID, updateHotel, DeleteHotel, getHotelInfo };
