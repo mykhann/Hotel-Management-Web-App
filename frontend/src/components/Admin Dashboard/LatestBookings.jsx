@@ -11,7 +11,7 @@ const LatestBookings = () => {
     const fetchBookings = async () => {
       try {
         const response = await axios.get("http://localhost:5500/api/v1/admin/bookings", {
-          withCredentials: true, // Include authentication cookies
+          withCredentials: true, 
         });
 
         setBookings(response.data.bookings);

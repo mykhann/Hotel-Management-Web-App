@@ -9,6 +9,7 @@ import Allrooms from "./Allrooms";
 import AllBookings from "./AllBookings";
 import AllUsers from "./AllUsers";
 import AllHotels from "./AllHotels";
+import { toast } from "react-toastify";
 
 const AdminDashboard = () => {
   const { user } = useSelector((store) => store.auth);

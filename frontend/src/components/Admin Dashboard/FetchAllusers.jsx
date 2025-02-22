@@ -8,6 +8,11 @@ const FetchAllUsers = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const [visibleUsers, setVisibleUsers] = useState(5);
+  const [visibleAdmins, setVisibleAdmins] = useState(5);
+  const [visibleOwners, setVisibleOwners] = useState(5);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -15,10 +20,10 @@ const FetchAllUsers = () => {
         const response = await axios.get("http://localhost:5500/api/v1/admin/users", {
           withCredentials: true,
         });
-        console.log("API Response:", response.data); 
-        setUsers(response.data.allusers || []); 
+        console.log("API Response:", response.data);
+        setUsers(response.data.allusers || []);
       } catch (err) {
-        console.error("Error fetching users:", err); 
+        console.error("Error fetching users:", err);
         setError("Failed to fetch users.");
       } finally {
         setLoading(false);
@@ -28,6 +33,18 @@ const FetchAllUsers = () => {
     fetchUsers();
   }, []);
 
+  // Search filter function
+  const filteredUsers = users.filter((user) =>
+    `${user.name || user.username} ${user.email}`
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase())
+  );
+
+  // Separate users by role
+  const normalUsers = filteredUsers.filter((user) => user.role === "user");
+  const admins = filteredUsers.filter((user) => user.role === "admin");
+  const hotelOwners = filteredUsers.filter((user) => user.role === "hotelOwner");
+
   return (
     <>
       <Navbar />
@@ -36,48 +53,80 @@ const FetchAllUsers = () => {
           All Users
         </h1>
 
+        {/* Search Input */}
+        <div className="flex justify-center mb-6">
+          <input
+            type="text"
+            placeholder="Search by name or email..."
+            className="w-full max-w-md px-4 py-2 bg-gray-800 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
+
         {loading && <p className="text-gray-400 text-center">Loading...</p>}
         {error && <p className="text-red-400 text-center">{error}</p>}
         {!loading && !error && users.length === 0 && (
           <p className="text-gray-400 text-center">No users found.</p>
         )}
 
-        {!loading && !error && users.length > 0 && (
+        {!loading && !error && filteredUsers.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-7xl mx-auto">
             {/* Users Section */}
-            <div className="bg-gray-800 p-4 rounded-lg">
-              <h2 className="text-xl font-semibold text-white mb-4">Users</h2>
-              {users
-                .filter((user) => user.role === "user") 
-                .map((user) => (
-                  <UserCard key={user._id} user={user} />
-                ))}
-            </div>
+            <UserCategory
+              title="Users"
+              users={normalUsers}
+              visibleCount={visibleUsers}
+              setVisibleCount={setVisibleUsers}
+            />
 
             {/* Admins Section */}
-            <div className="bg-gray-800 p-4 rounded-lg">
-              <h2 className="text-xl font-semibold text-white mb-4">Admins</h2>
-              {users
-                .filter((user) => user.role === "admin") 
-                .map((user) => (
-                  <UserCard key={user._id} user={user} />
-                ))}
-            </div>
+            <UserCategory
+              title="Admins"
+              users={admins}
+              visibleCount={visibleAdmins}
+              setVisibleCount={setVisibleAdmins}
+            />
 
             {/* Hotel Owners Section */}
-            <div className="bg-gray-800 p-4 rounded-lg">
-              <h2 className="text-xl font-semibold text-white mb-4">Hotel Owners</h2>
-              {users
-                .filter((user) => user.role === "hotelOwner") 
-                .map((user) => (
-                  <UserCard key={user._id} user={user} />
-                ))}
-            </div>
+            <UserCategory
+              title="Hotel Owners"
+              users={hotelOwners}
+              visibleCount={visibleOwners}
+              setVisibleCount={setVisibleOwners}
+            />
           </div>
+        )}
+
+        {!loading && !error && filteredUsers.length === 0 && (
+          <p className="text-gray-400 text-center mt-4">No matching users found.</p>
         )}
       </div>
       <Footer />
     </>
+  );
+};
+
+const UserCategory = ({ title, users, visibleCount, setVisibleCount }) => {
+  return (
+    <div className="bg-gray-800 p-4 rounded-lg">
+      <h2 className="text-xl font-semibold text-white mb-4">{title}</h2>
+
+      {users.slice(0, visibleCount).map((user) => (
+        <UserCard key={user._id} user={user} />
+      ))}
+
+      {visibleCount < users.length && (
+        <div className="flex justify-center mt-4">
+          <button
+            onClick={() => setVisibleCount((prev) => prev + 5)}
+            className="bg-yellow-500 text-gray-900 px-6 py-2 rounded-lg font-bold hover:bg-yellow-600 transition-all duration-300"
+          >
+            Load More {title}
+          </button>
+        </div>
+      )}
+    </div>
   );
 };
 
