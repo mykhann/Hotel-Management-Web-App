@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import { FaPlus, FaDoorOpen, FaBook, FaHotel, FaSignOutAlt } from "react-icons/fa";
+import {
+  FaPlus,
+  FaDoorOpen,
+  FaBook,
+  FaHotel,
+  FaSignOutAlt,
+} from "react-icons/fa";
 import LatestHotelBookings from "./LatestHotelBookings";
 
 const HotelDashboard = () => {
@@ -15,14 +21,19 @@ const HotelDashboard = () => {
   useEffect(() => {
     const fetchHotelInfo = async () => {
       try {
-        const { data } = await axios.get("http://localhost:5500/api/v1/hotel/my-hotel", {
-          withCredentials: true, 
-        });
+        const { data } = await axios.get(
+          "http://localhost:5500/api/v1/hotel/my-hotel",
+          {
+            withCredentials: true,
+          }
+        );
         setHotel(data.hotel);
         setRooms(data.rooms || []);
         setBookings(data.bookings || []);
       } catch (err) {
-        setError(err.response?.data?.message || "Failed to fetch hotel information");
+        setError(
+          err.response?.data?.message || "Failed to fetch hotel information"
+        );
       } finally {
         setLoading(false);
       }
@@ -32,14 +43,10 @@ const HotelDashboard = () => {
   }, []);
 
   // Logout Function
-  const handleLogout = async () => {
-    try {
-      await axios.post("http://localhost:5500/api/v1/auth/logout", {}, { withCredentials: true });
-      localStorage.removeItem("userToken"); 
-      navigate("/login");
-    } catch (error) {
-      console.error("Logout failed:", error);
-    }
+  const handleLogout = () => {
+    dispatch(setUser(null));
+    navigate("/login");
+    toast.success("Logged out successfully");
   };
 
   if (loading) {
@@ -61,8 +68,12 @@ const HotelDashboard = () => {
             className="w-16 h-16 rounded-full mr-4"
           />
           <div>
-            <h1 className="text-3xl font-bold text-white">{hotel?.name || "Hotel Name"}</h1>
-            <p className="text-sm text-gray-400">{hotel?.location || "Location"}</p>
+            <h1 className="text-3xl font-bold text-white">
+              {hotel?.name || "Hotel Name"}
+            </h1>
+            <p className="text-sm text-gray-400">
+              {hotel?.location || "Location"}
+            </p>
           </div>
         </div>
 
@@ -84,7 +95,9 @@ const HotelDashboard = () => {
               <div className="flex flex-col items-center text-center">
                 <FaPlus className="text-5xl text-green-500 mb-4 transition duration-300 hover:text-green-400" />
                 <h2 className="text-xl font-semibold text-white">Add Room</h2>
-                <p className="text-sm text-gray-400 mt-1">Register a new room</p>
+                <p className="text-sm text-gray-400 mt-1">
+                  Register a new room
+                </p>
               </div>
             </div>
           </Link>
@@ -95,9 +108,12 @@ const HotelDashboard = () => {
               <div className="flex flex-col items-center text-center">
                 <FaDoorOpen className="text-5xl text-purple-500 mb-4 transition duration-300 hover:text-purple-400" />
                 <h2 className="text-xl font-semibold text-white">
-                  All Rooms <span className="text-blue-400">({rooms.length})</span>
+                  All Rooms{" "}
+                  <span className="text-blue-400">({rooms.length})</span>
                 </h2>
-                <p className="text-sm text-gray-400 mt-1">View and manage rooms</p>
+                <p className="text-sm text-gray-400 mt-1">
+                  View and manage rooms
+                </p>
               </div>
             </div>
           </Link>
@@ -108,9 +124,12 @@ const HotelDashboard = () => {
               <div className="flex flex-col items-center text-center">
                 <FaBook className="text-5xl text-blue-500 mb-4 transition duration-300 hover:text-blue-400" />
                 <h2 className="text-xl font-semibold text-white">
-                  All Bookings <span className="text-yellow-400">({bookings.length})</span>
+                  All Bookings{" "}
+                  <span className="text-yellow-400">({bookings.length})</span>
                 </h2>
-                <p className="text-sm text-gray-400 mt-1">Manage all bookings</p>
+                <p className="text-sm text-gray-400 mt-1">
+                  Manage all bookings
+                </p>
               </div>
             </div>
           </Link>

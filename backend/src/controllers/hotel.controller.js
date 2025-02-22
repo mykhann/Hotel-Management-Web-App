@@ -3,6 +3,7 @@ import { uploadOnCloudinary } from "../Middleware/utils/cloudinary.js";
 import { Hotel } from "../Models/hotel.model.js";
 import mongoose from "mongoose";
 import { User } from "../Models/user.model.js";
+import { Room } from "../models/room.model.js";
 import bcrypt from "bcrypt"
 
 const createHotel = asyncHandler(async (req, res) => {
@@ -85,7 +86,7 @@ const getHotelByID = asyncHandler(async (req, res) => {
         });
     }
 
-    const hotel = await Hotel.findById(id);
+    const hotel = await Hotel.findById(id).populate("Room");
 
     if (!hotel) {
         return res.status(404).json({
@@ -203,6 +204,29 @@ const getHotelInfo = asyncHandler(async (req, res) => {
 
 
 
+const getHotelRooms = asyncHandler(async (req, res) => {
+    try {
+        // Find the hotel owned by the logged-in user
+        const hotel = await Hotel.findOne({ owner: req.user._id });
+
+        if (!hotel) {
+            return res.status(404).json({ success: false, message: "Hotel not found for this owner" });
+        }
+
+        // Fetch rooms for the found hotel
+        const rooms = await Room.find({ hotel: hotel._id }).populate("hotel", "name location rating");
+
+        if (!rooms.length) {
+            return res.status(404).json({ success: false, message: "No rooms found for this hotel" });
+        }
+
+        res.status(200).json({ success: true, rooms });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
 
 
-export { createHotel, getAllHotels, getHotelByID, updateHotel, DeleteHotel, getHotelInfo };
+
+
+export { createHotel, getAllHotels, getHotelByID, updateHotel, DeleteHotel, getHotelInfo,getHotelRooms };
