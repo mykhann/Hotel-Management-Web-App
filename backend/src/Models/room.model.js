@@ -15,14 +15,14 @@ const roomSchema = new mongoose.Schema(
     type: {
       type: String,
       required: true,
-      enum: ["single", "double", "suite", "deluxe"],
+      enum: ["single", "Deluxe","Superior"],
     },
     price: {
       type: Number,
       required: true,
     },
     amenities: {
-      type: [String], // Example: ["WiFi", "TV", "Mini Fridge"]
+      type: [String], 
       default: [],
     },
     capacity: {

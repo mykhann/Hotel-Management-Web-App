@@ -80,7 +80,8 @@ const LoginUser = asyncHandler(async (req, res) => {
         name: user.name,
         email: user.email,
         username:user.username,
-        phone:user.phone
+        phone:user.phone,
+        role: user.role
     };
 
     const cookieOptions = {
@@ -155,7 +156,64 @@ const getProfileDetails= asyncHandler(async(req,res)=>{
 
 })
 
+const deleteUser = asyncHandler(async (req, res) => {
+    const { userId } = req.params; 
+    const authUser = req.user; 
+  
+    // Check if the logged-in user is an admin
+    if (!authUser || authUser.role !== "admin") {
+      return res.status(403).json({
+        success: false,
+        message: "Access denied. Only admins can delete users.",
+      });
+    }
+  
+    // Check if the user exists
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+  
+    // Delete the user
+    await User.findByIdAndDelete(userId);
+  
+    res.status(200).json({
+      success: true,
+      message: "User deleted successfully",
+    });
+  });
+
+  const makeAdmin = asyncHandler(async (req, res) => {
+    const { userId } = req.params;
+    const authUser = req.user; // Authenticated user
+
+    // Check if the logged-in user is an admin
+    if (!authUser || authUser.role !== "admin") {
+        return res.status(403).json({
+            success: false,
+            message: "Access denied. Only admins can make users admin.",
+        });
+    }
+
+    // Find the user by ID
+    const user = await User.findById(userId);
+    if (!user) {
+        return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    // Update the role to admin
+    user.role = "admin";
+    await user.save();
+
+    res.status(200).json({
+        success: true,
+        message: "User has been promoted to admin successfully",
+        user
+    });
+});
 
 
 
-export { LoginUser, RegisterUser, LogoutUser, UpdateUser,getProfileDetails };
+
+
+export { LoginUser, RegisterUser, LogoutUser, UpdateUser,getProfileDetails,deleteUser,makeAdmin };

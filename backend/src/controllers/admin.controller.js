@@ -3,29 +3,34 @@ import { Booking } from "../Models/booking.model.js";
 import { Room } from "../Models/room.model.js";
 import { User } from "../Models/user.model.js";
 
-
 const viewAllBookings = asyncHandler(async (req, res) => {
     const userId = req.user;
-    const bookings = await Booking.find().sort("-1");
-    if (!bookings) {
-        return res.status(404).json({
-            success: false,
-            message: "Bookings not found"
-        });
-    };
 
+    // Check if the user is an admin
     if (userId.role !== "admin") {
-        return res.status(404).json({
+        return res.status(403).json({
             success: false,
-            message: "You are not authorized to access this"
-        })
+            message: "You are not authorized to access this",
+        });
     }
+
+    const bookings = await Booking.find()
+        .sort({ createdAt: -1 }) 
+        .populate({
+            path: "room", 
+            populate: {
+                path: "hotel", 
+                model: "Hotel", 
+            },
+        })
+        .populate("user"); 
     res.status(200).json({
         success: true,
-        bookings
-    })
-
+        message: "All bookings fetched successfully",
+        bookings,
+    });
 });
+
 
 // view all rooms 
 

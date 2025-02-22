@@ -46,7 +46,7 @@ const createHotel = asyncHandler(async (req, res) => {
         phone,
         email,
         images: imageUrl ? [imageUrl] : [],
-        owner: hotelOwner._id, 
+        owner: hotelOwner._id, // Link hotel to owner
     });
 
     res.status(201).json({
@@ -61,7 +61,7 @@ const createHotel = asyncHandler(async (req, res) => {
 // get all hotels 
 const getAllHotels = asyncHandler(async (req, res) => {
 
-    const hotels = await Hotel.find().populate("owner", "name email")
+    const hotels = await Hotel.find().sort({createdAt:-1}).populate("owner", "name email")
     if (!hotels.length === 0) {
         return res.status(404).json({
             success: false,

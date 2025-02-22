@@ -205,4 +205,28 @@ const updateBooking = asyncHandler(async (req, res) => {
     });
 });
 
-export { createBooking, getBookingById,cancelBooking ,updateBooking};
+
+const getUserBookings = asyncHandler(async (req, res) => {
+    const userId = req.user.id;
+
+ 
+    const bookings = await Booking.find({ user: userId }).sort({createdAt:-1})
+        .populate("room", "roomNumber price")
+        .populate("hotel", "name images email location");
+
+    if (!bookings || bookings.length === 0) {
+        return res.status(404).json({
+            success: false,
+            message: "No bookings found for this user",
+        });
+    }
+
+    res.status(200).json({
+        success: true,
+        bookings,
+    });
+});
+
+
+
+export { createBooking, getBookingById,cancelBooking ,updateBooking,getUserBookings};
