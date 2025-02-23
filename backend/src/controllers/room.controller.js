@@ -8,7 +8,7 @@ import mongoose from "mongoose"
 
 const AddRoom = asyncHandler(async (req, res) => {
     const { hotelId } = req.params;
-    const { roomNumber, type, price, amenities, capacity, description } = req.body;
+    const {  type, price, amenities, capacity, description } = req.body;
     const userId = req.user.id;
 
     // Find hotel
@@ -42,7 +42,6 @@ const AddRoom = asyncHandler(async (req, res) => {
     // Create new room
     const newRoom = new Room({
         hotel: hotelId,
-        roomNumber,
         type,
         price,
         amenities,
