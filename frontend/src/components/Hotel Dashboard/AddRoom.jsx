@@ -49,9 +49,10 @@ const AddRoom = () => {
       toast.error("You can upload a maximum of 5 images.");
       return;
     }
-    
+
+    // Create temporary URLs for image preview
     const imageUrls = files.map((file) => URL.createObjectURL(file));
-    setRoomData({ ...roomData, images: imageUrls });
+    setRoomData({ ...roomData, images: files }); // Store the actual file objects
   };
 
   // Handle form submission
@@ -59,14 +60,31 @@ const AddRoom = () => {
     e.preventDefault();
     setLoading(true);
 
+    // Create a FormData object
+    const formData = new FormData();
+
+    // Append room data to FormData
+    formData.append("type", roomData.type);
+    formData.append("price", roomData.price);
+    formData.append("capacity", roomData.capacity);
+    formData.append("description", roomData.description);
+    roomData.amenities.forEach((amenity) => {
+      formData.append("amenities", amenity);
+    });
+
+    // Append images to FormData
+    roomData.images.forEach((image, index) => {
+      formData.append("images", image); 
+    });
+
     try {
       const response = await axios.post(
         "http://localhost:5500/api/v1/room/add",
-        roomData,
+        formData,
         {
           withCredentials: true,
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "multipart/form-data",
           },
         }
       );
@@ -213,7 +231,7 @@ const AddRoom = () => {
               {roomData.images.map((image, index) => (
                 <img
                   key={index}
-                  src={image}
+                  src={URL.createObjectURL(image)} 
                   alt={`Room ${index}`}
                   className="w-20 h-20 object-cover rounded-md"
                 />
