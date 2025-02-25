@@ -35,7 +35,7 @@ const createHotel = asyncHandler(async (req, res) => {
         name: ownerName,
         email: ownerEmail,
         password: hashedPassword,
-        isHotelOwner: true,
+        role: "hotelOwner",
         username: ownerEmail.split("@")[0]
     });
 
