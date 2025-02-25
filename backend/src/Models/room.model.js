@@ -9,13 +9,12 @@ const roomSchema = new mongoose.Schema(
     },
     roomNumber: {
       type: String,
-      required: true,
-      unique: true,
+     
     },
     type: {
       type: String,
       required: true,
-      enum: ["single", "Deluxe","Superior"],
+      enum: ["Single", "Deluxe","Superior"],
     },
     price: {
       type: Number,

@@ -82,7 +82,7 @@ const router = createBrowserRouter([
   { path: "/hotel/view-rooms", element: <FetchAllHotelStaffRooms />, errorElement: <ErrorPage /> },
   { path: "/hotel/view-bookings", element: <FetchAllHotelBookings />, errorElement: <ErrorPage /> },
   { path: "/hotel/view-hotel", element: <HotelInfoCard />, errorElement: <ErrorPage /> },
-  { path: "/hotel/:hotelId/add-room", element: <AddRoom />, errorElement: <ErrorPage /> },
+  { path: "/hotel/add-room", element: <AddRoom />, errorElement: <ErrorPage /> },
 
 
 ]);

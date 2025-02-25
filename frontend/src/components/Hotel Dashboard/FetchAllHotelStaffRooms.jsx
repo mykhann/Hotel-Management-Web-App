@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios"; // Import axios
+import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setSingleHotelRoom } from "../../reduxStore/HotelSlice";
-import Navbar from "../shared/Navbar";
 import Footer from "../layout/Footer";
 import { FaWifi, FaTv, FaSnowflake, FaUtensils, FaParking } from "react-icons/fa";
 import SideNavbar from "./SideNavbar";
+import { ClipLoader } from "react-spinners"
 
 const FetchAllHotelStaffRooms = () => {
   const { hotelId } = useParams();
@@ -14,6 +14,7 @@ const FetchAllHotelStaffRooms = () => {
   const [loading, setLoading] = useState(true);
   const [groupedRooms, setGroupedRooms] = useState({});
   const [selectedImages, setSelectedImages] = useState({});
+  const user = useSelector((store) => store.auth.user);
 
   const navigate = useNavigate();
 
@@ -21,7 +22,7 @@ const FetchAllHotelStaffRooms = () => {
     const fetchRooms = async () => {
       try {
         const response = await axios.get("http://localhost:5500/api/v1/hotel/my-rooms", {
-          withCredentials: true, 
+          withCredentials: true,
         });
 
         const data = response.data;
@@ -71,7 +72,9 @@ const FetchAllHotelStaffRooms = () => {
       <div className="flex flex-col items-center p-8 bg-gray-900 min-h-screen text-white">
         <h1 className="text-3xl font-bold mb-8 md:ml-32 text-yellow-400">Rooms for Hotel</h1>
         {loading ? (
-          <p className="text-gray-400">Loading...</p>
+          <div className="flex justify-center items-center h-64">
+            <ClipLoader color="#F59E0B" size={50} /> {/* Loading spinner */}
+          </div>
         ) : Object.keys(groupedRooms).length > 0 ? (
           Object.entries(groupedRooms).map(([type, rooms]) => (
             <div key={type} className="w-full max-w-6xl mb-12">
@@ -130,12 +133,14 @@ const FetchAllHotelStaffRooms = () => {
                       </div>
 
                       {/* Book Now Button */}
-                      <button
-                        onClick={() => navigate(`/book/${room._id}`)}
-                        className="mt-4 bg-yellow-400 text-gray-900 px-6 py-2 rounded-lg font-semibold hover:bg-yellow-500 transition-colors duration-200"
-                      >
-                        Book Now
-                      </button>
+                      {user?.role === 'user' && (
+                        <button
+                          onClick={() => navigate(`/book/${room._id}`)}
+                          className="mt-4 bg-yellow-400 text-gray-900 px-6 py-2 rounded-lg font-semibold hover:bg-yellow-500 transition-colors duration-200"
+                        >
+                          Book Now
+                        </button>
+                      )}
                     </div>
                   </div>
                 ))}

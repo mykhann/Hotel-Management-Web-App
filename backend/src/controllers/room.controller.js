@@ -7,18 +7,19 @@ import mongoose from "mongoose"
 
 
 const AddRoom = asyncHandler(async (req, res) => {
-    const { hotelId } = req.params;
     const { roomNumber, type, price, amenities, capacity, description } = req.body;
     const userId = req.user.id;
 
-    // Find hotel
-    const hotel = await Hotel.findById(hotelId);
+    // Find hotel associated with the logged-in user
+    const hotel = await Hotel.findOne({ owner: userId });
     if (!hotel) {
         return res.status(404).json({
             success: false,
-            message: "Hotel not found",
+            message: "No hotel found associated with this user",
         });
     }
+
+    const hotelId = hotel._id;
 
     // Check if user is owner or admin
     if (hotel.owner.toString() !== userId && req.user.role !== "admin") {
@@ -59,8 +60,8 @@ const AddRoom = asyncHandler(async (req, res) => {
         message: "Room added successfully",
         room: newRoom,
     });
-
 });
+
 
 // get rooms from a specific hotel 
 
