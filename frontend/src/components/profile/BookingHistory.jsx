@@ -4,11 +4,13 @@ import { toast } from "react-toastify";
 import { MapPinIcon, EnvelopeIcon } from "@heroicons/react/24/solid";
 import Navbar from "../shared/Navbar";
 import Footer from "../layout/Footer";
+import { useSelector } from "react-redux";
 
 const BookingHistory = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const user = useSelector((store)=>store.auth.user)
 
   useEffect(() => {
     const fetchBookingHistory = async () => {
@@ -50,7 +52,10 @@ const BookingHistory = () => {
 
   return (
     <>
-      <Navbar />
+     {user?.role === "user" && <Navbar />}
+     {user?.role === "hotelOwner" && <SideNavbar handleLogout={handleLogout} />}
+
+     
       <div className="flex flex-col items-center gap-4 p-4 bg-gray-900 min-h-screen">
         <h2 className="text-2xl font-bold text-white mb-8">Booking History</h2>
         {bookings.length === 0 ? (

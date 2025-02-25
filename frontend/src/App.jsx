@@ -23,10 +23,11 @@ import AddHotel from "./components/Admin Dashboard/AddHotel";
 import FetchAllusers from "./components/Admin Dashboard/FetchAllusers";
 import FetchAllAdminBookings from "./components/Admin Dashboard/FetchAllAdminBookings";
 import FetchAllRooms from "./components/Admin Dashboard/FetchAllRooms";
-import HotelDashboard from "./components/Hotel Dashboard/HotelDashboardUi";
+import HoteldashboardUi from "./components/Hotel Dashboard/HotelDashboardUi.jsx"
 import FetchAllHotelStaffRooms from "./components/Hotel Dashboard/FetchAllHotelStaffRooms";
 import FetchAllHotelBookings from "./components/Hotel Dashboard/FetchAllHotelBookings";
 import HotelInfoCard from "./components/Hotel Dashboard/HotelInfoCard";
+import AddRoom from "./components/Hotel Dashboard/AddRoom.jsx";
 
 // Error Boundary Component
 const ErrorPage = () => {
@@ -77,10 +78,11 @@ const router = createBrowserRouter([
   { path: "/admin/view-rooms", element: <FetchAllRooms />, errorElement: <ErrorPage /> },
 
   // Hotel Dashboard 
-  { path: "/hotel", element: <HotelDashboard />, errorElement: <ErrorPage /> },
+  { path: "/hotel", element: <HoteldashboardUi />, errorElement: <ErrorPage /> },
   { path: "/hotel/view-rooms", element: <FetchAllHotelStaffRooms />, errorElement: <ErrorPage /> },
   { path: "/hotel/view-bookings", element: <FetchAllHotelBookings />, errorElement: <ErrorPage /> },
   { path: "/hotel/view-hotel", element: <HotelInfoCard />, errorElement: <ErrorPage /> },
+  { path: "/hotel/:hotelId/add-room", element: <AddRoom />, errorElement: <ErrorPage /> },
 
 
 ]);

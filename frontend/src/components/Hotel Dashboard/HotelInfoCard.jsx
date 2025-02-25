@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { FaMapMarkerAlt, FaStar, FaEnvelope, FaPhone } from "react-icons/fa";
+import SideNavbar from "./SideNavbar";
 
 const HotelInfoCard = () => {
   const [hotel, setHotel] = useState(null);
@@ -28,7 +29,9 @@ const HotelInfoCard = () => {
   if (error) return <p className="text-center text-red-500">{error}</p>;
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900 p-4">
+   <>
+   <SideNavbar/>
+   <div className="min-h-screen flex items-center justify-center bg-gray-900 p-4">
       <div className="w-full max-w-3xl flex bg-gray-800 text-white rounded-lg overflow-hidden shadow-lg transform transition-all duration-300 hover:shadow-2xl">
         {/* Hotel Image on the Left */}
         <div className="w-1/3 relative">
@@ -78,6 +81,7 @@ const HotelInfoCard = () => {
         </div>
       </div>
     </div>
+   </>
   );
 };
 

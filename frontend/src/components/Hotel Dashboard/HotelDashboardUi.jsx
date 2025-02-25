@@ -60,7 +60,7 @@ const HotelDashboard = () => {
   return (
     <div className="bg-gradient-to-r from-blue-900 to-gray-900 min-h-screen">
       {/* Hotel Header */}
-      <div className="flex items-center justify-between p-6 bg-gray-800">
+      <div className="flex-1  items-center justify-between p-6 bg-gray-800">
         <div className="flex items-center">
           <img
             src={hotel?.images?.[0] || "https://via.placeholder.com/150"}

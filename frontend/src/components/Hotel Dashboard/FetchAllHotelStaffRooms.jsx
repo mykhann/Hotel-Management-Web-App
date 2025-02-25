@@ -6,6 +6,7 @@ import { setSingleHotelRoom } from "../../reduxStore/HotelSlice";
 import Navbar from "../shared/Navbar";
 import Footer from "../layout/Footer";
 import { FaWifi, FaTv, FaSnowflake, FaUtensils, FaParking } from "react-icons/fa";
+import SideNavbar from "./SideNavbar";
 
 const FetchAllHotelStaffRooms = () => {
   const { hotelId } = useParams();
@@ -66,19 +67,19 @@ const FetchAllHotelStaffRooms = () => {
 
   return (
     <>
-      <Navbar />
+      <SideNavbar />
       <div className="flex flex-col items-center p-8 bg-gray-900 min-h-screen text-white">
-        <h1 className="text-3xl font-bold mb-8 text-yellow-400">Rooms for Hotel</h1>
+        <h1 className="text-3xl font-bold mb-8 md:ml-32 text-yellow-400">Rooms for Hotel</h1>
         {loading ? (
           <p className="text-gray-400">Loading...</p>
         ) : Object.keys(groupedRooms).length > 0 ? (
           Object.entries(groupedRooms).map(([type, rooms]) => (
             <div key={type} className="w-full max-w-6xl mb-12">
-              <h2 className="text-2xl font-bold text-yellow-400 border-b border-yellow-400 pb-2 mb-6">
+              <h2 className="text-2xl md:ml-32 font-bold text-yellow-400 border-b border-yellow-400 pb-2 mb-6">
                 {type} Rooms
               </h2>
 
-              <div className="flex flex-col gap-8">
+              <div className="flex md:ml-32 flex-col gap-8">
                 {rooms.map((room) => (
                   <div key={room._id} className="bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
                     <div className="flex flex-col md:flex-row gap-6">

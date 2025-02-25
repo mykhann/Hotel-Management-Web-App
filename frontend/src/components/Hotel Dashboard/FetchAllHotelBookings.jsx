@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { FaEnvelope } from "react-icons/fa";
 import Navbar from "../shared/Navbar";
 import Footer from "../layout/Footer";
+import SideNavbar from "./SideNavbar";
 
 const FetchAllHotelBookings = () => {
   const [bookings, setBookings] = useState([]);
@@ -67,12 +68,12 @@ const FetchAllHotelBookings = () => {
 
   return (
     <>
-      <Navbar />
+     
       <div className="flex flex-col items-center gap-4 p-4 bg-gray-900 min-h-screen">
-        <h2 className="text-2xl font-bold text-white mb-8">Bookings</h2>
+        <h2 className="text-2xl font-bold text-white mb-8">Room Bookings</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-6xl">
           <div>
-            <h3 className="text-xl font-semibold text-white mb-4">Today's Bookings</h3>
+            <h3 className="text-xl font-semibold md:ml-28 text-white mb-4">Today's Bookings</h3>
             {todaysBookings.length === 0 ? (
               <p className="text-center text-gray-400">No bookings for today</p>
             ) : (
@@ -83,7 +84,7 @@ const FetchAllHotelBookings = () => {
           </div>
 
           <div>
-            <h3 className="text-xl font-semibold text-white mb-4">Other Bookings</h3>
+            <h3 className="text-xl md:ml-28 font-semibold text-white mb-4">Other Bookings</h3>
             {otherBookings.length === 0 ? (
               <p className="text-center text-gray-400">No other bookings</p>
             ) : (
@@ -109,7 +110,9 @@ const BookingCard = ({ booking, cancelBooking }) => {
   };
 
   return (
-    <div className="w-full flex bg-gray-800 text-white shadow-md rounded-lg overflow-hidden border-2 border-transparent transition-all duration-300 hover:border-red-500 mb-4 p-3">
+   <>
+   <SideNavbar/>
+   <div className=" md:ml-28 w-full flex bg-gray-800 text-white shadow-md rounded-lg overflow-hidden border-2 border-transparent transition-all duration-300 hover:border-red-500 mb-4 p-3">
       <div className="w-full p-2 flex flex-col justify-between">
         {/* Guest Name */}
         <p className="text-sm font-medium text-gray-300">
@@ -152,6 +155,7 @@ const BookingCard = ({ booking, cancelBooking }) => {
         )}
       </div>
     </div>
+   </>
   );
 };
 
