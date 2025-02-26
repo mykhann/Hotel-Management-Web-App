@@ -4,13 +4,17 @@ const roomSchema = new mongoose.Schema(
   {
     hotel: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Hotel", // References the Hotel model
+      ref: "Hotel", 
       required: true,
     },
+<<<<<<< HEAD
     roomNumber: {
       type: String,
      
     },
+=======
+  
+>>>>>>> e3ead47d68ba24b8d38faf7856552b9bc0c325c4
     type: {
       type: String,
       required: true,
@@ -33,7 +37,7 @@ const roomSchema = new mongoose.Schema(
       default: false,
     },
     images: {
-      type: [String], // Store Cloudinary or local image URLs
+      type: [String], 
       default: [],
     },
     description: {
