@@ -10,8 +10,7 @@ import {
   FaTimes,
 } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
-import axios from "axios";
+
 import { logout, setUser } from "../../reduxStore/authSlice";
 
 const SideNavbar = () => {

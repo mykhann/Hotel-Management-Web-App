@@ -1,4 +1,4 @@
-import { Room } from "../Models/room.model.js";
+import { Room } from "../models/room.model.js";
 import { Hotel } from "../Models/hotel.model.js";
 import { asyncHandler } from "../Middleware/asyncHandler.js";
 import { uploadOnCloudinary } from "../Middleware/utils/cloudinary.js";
@@ -7,12 +7,10 @@ import mongoose from "mongoose"
 
 
 const AddRoom = asyncHandler(async (req, res) => {
-<<<<<<< HEAD
-    const { roomNumber, type, price, amenities, capacity, description } = req.body;
-=======
-    const { hotelId } = req.params;
+
+   
     const {  type, price, amenities, capacity, description } = req.body;
->>>>>>> e3ead47d68ba24b8d38faf7856552b9bc0c325c4
+
     const userId = req.user.id;
 
     // Find hotel associated with the logged-in user
@@ -27,7 +25,7 @@ const AddRoom = asyncHandler(async (req, res) => {
     const hotelId = hotel._id;
 
     // Check if user is owner or admin
-    if (hotel.owner.toString() !== userId && req.user.role !== "admin") {
+    if (hotel.owner.toString() !== userId ) {
         return res.status(403).json({
             success: false,
             message: "You are not authorized to access this",

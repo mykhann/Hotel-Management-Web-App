@@ -27,6 +27,7 @@ import HoteldashboardUi from "./components/Hotel Dashboard/HotelDashboardUi.jsx"
 import FetchAllHotelStaffRooms from "./components/Hotel Dashboard/FetchAllHotelStaffRooms";
 import FetchAllHotelBookings from "./components/Hotel Dashboard/FetchAllHotelBookings";
 import HotelInfoCard from "./components/Hotel Dashboard/HotelInfoCard";
+import AddRoom from "./components/Hotel Dashboard/AddRoom.jsx";
 
 // Error Boundary Component
 const ErrorPage = () => {
@@ -81,6 +82,7 @@ const router = createBrowserRouter([
   { path: "/hotel/view-rooms", element: <FetchAllHotelStaffRooms />, errorElement: <ErrorPage /> },
   { path: "/hotel/view-bookings", element: <FetchAllHotelBookings />, errorElement: <ErrorPage /> },
   { path: "/hotel/view-hotel", element: <HotelInfoCard />, errorElement: <ErrorPage /> },
+  { path: "/hotel/add-room", element: <AddRoom />, errorElement: <ErrorPage /> },
 
 
 ]);
