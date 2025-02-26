@@ -1,9 +1,30 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { FaPlus, FaDoorOpen, FaBook, FaHotel, FaSignOutAlt, FaBars, FaTimes } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  FaPlus,
+  FaDoorOpen,
+  FaBook,
+  FaHotel,
+  FaSignOutAlt,
+  FaBars,
+  FaTimes,
+} from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import axios from "axios";
+import { logout, setUser } from "../../reduxStore/authSlice";
 
-const SideNavbar = ({ handleLogout }) => {
+const SideNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const user = useSelector((store) => store.auth.user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    dispatch(logout());
+    localStorage.removeItem("token");
+    navigate("/login")
+  };
 
   return (
     <>
@@ -17,12 +38,16 @@ const SideNavbar = ({ handleLogout }) => {
 
       {/* Sidebar */}
       <div
-        className={`h-screen w-64 bg-gray-900 text-white fixed top-0 left-0 flex flex-col p-6 shadow-lg transition-transform transform ${isOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}
+        className={`h-screen w-64 bg-gray-900 text-white fixed top-0 left-0 flex flex-col p-6 shadow-lg transition-transform transform ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        } md:translate-x-0`}
       >
         {/* Logo */}
         <div className="mb-10 flex items-center">
           <FaHotel className="text-3xl text-blue-500 mr-2" />
-          <h1 className="text-2xl font-bold">Hotel Admin</h1>
+          <Link to="/hotel">
+            <h1 className="text-2xl font-bold">Hotel Admin</h1>
+          </Link>
         </div>
 
         {/* Navigation Links */}

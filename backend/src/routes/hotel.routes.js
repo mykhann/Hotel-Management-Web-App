@@ -7,7 +7,7 @@ const router = new Router();
 router.post("/create", upload.single("image"), createHotel)
 router.get("/get/hotels", getAllHotels)
 router.get("/get/:id", getHotelByID)
-router.put("/update/:id", isAuthenticated, upload.single("image"), updateHotel)
+router.put("/update", isAuthenticated, upload.single("image"), updateHotel)
 router.delete("/delete/:id", isAuthenticated, DeleteHotel)
 router.get("/my-hotel", isAuthenticated, getHotelInfo);
 router.get("/my-rooms", isAuthenticated, getHotelRooms);

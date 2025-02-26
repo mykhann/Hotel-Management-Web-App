@@ -103,28 +103,29 @@ const getHotelByID = asyncHandler(async (req, res) => {
 
 // Update Hotel Details
 const updateHotel = asyncHandler(async (req, res) => {
-    const { id } = req.params;
+    const userId = req.user.id;
     const { name, location, description, phone, email } = req.body;
 
+    // Find the hotel using the correct field (_id)
+    let hotel = await Hotel.findOne({ owner: userId }); // Assuming `owner` stores the hotel owner's userId
 
-    // Find the hotel
-    let hotel = await Hotel.findById(id);
     if (!hotel) {
         return res.status(404).json({ success: false, message: "Hotel not found" });
     }
 
-    // only hotel owner /admin can update the hotel info 
-
+    // Authorization check: Only owner or admin can update
     if (hotel.owner.toString() !== req.user._id.toString() && req.user.role !== "admin") {
         return res.status(403).json({ success: false, message: "Not authorized to update this hotel" });
     }
 
+    // Update only provided fields
     if (name) hotel.name = name;
     if (location) hotel.location = location;
     if (description) hotel.description = description;
     if (phone) hotel.phone = phone;
     if (email) hotel.email = email;
 
+    // Handle image upload if a file is provided
     if (req.file) {
         const result = await uploadOnCloudinary(req.file.buffer, `hotels/${Date.now()}-${req.file.originalname}`);
         if (result.secure_url) {
@@ -141,6 +142,7 @@ const updateHotel = asyncHandler(async (req, res) => {
         hotel
     });
 });
+
 
 // Delete hotel => only admin or hotel owner can delete 
 

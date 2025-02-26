@@ -74,7 +74,7 @@ const AddRoom = () => {
 
     // Append images to FormData
     roomData.images.forEach((image, index) => {
-      formData.append("images", image); 
+      formData.append("images", image);
     });
 
     try {
@@ -113,141 +113,153 @@ const AddRoom = () => {
   return (
     <>
       <SideNavbar />
-      <div className="min-h-screen bg-gray-900 text-white p-8">
-        <h1 className="text-3xl font-bold mb-8 text-yellow-400">Add New Room</h1>
-        <form onSubmit={handleSubmit} className="max-w-3xl mx-auto">
-          {/* Room Type */}
-          <div className="mb-6">
-            <label htmlFor="type" className="block text-sm font-medium text-gray-300">
-              Room Type
-            </label>
-            <select
-              id="type"
-              name="type"
-              value={roomData.type}
-              onChange={handleInputChange}
-              className="mt-1 block w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-white"
-              required
-            >
-              <option value="" disabled>
-                Select a room type
-              </option>
-              {roomTypes.map((type, index) => (
-                <option key={index} value={type}>
-                  {type}
+      <div className="min-h-screen bg-gray-900 text-white p-4 md:p-8">
+        <div className="max-w-2xl mx-auto bg-gray-800 rounded-lg shadow-lg p-6">
+          <h1 className="text-2xl md:text-3xl font-bold mb-6 text-yellow-400 text-center">
+            Add New Room
+          </h1>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Room Type */}
+            <div>
+              <label htmlFor="type" className="block text-sm font-medium text-gray-300">
+                Room Type
+              </label>
+              <select
+                id="type"
+                name="type"
+                value={roomData.type}
+                onChange={handleInputChange}
+                className="mt-1 block w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-white"
+                required
+              >
+                <option value="" disabled>
+                  Select a room type
                 </option>
-              ))}
-            </select>
-          </div>
+                {roomTypes.map((type, index) => (
+                  <option key={index} value={type}>
+                    {type}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-          {/* Room Price */}
-          <div className="mb-6">
-            <label htmlFor="price" className="block text-sm font-medium text-gray-300">
-              Price per Night ($)
-            </label>
-            <input
-              type="number"
-              id="price"
-              name="price"
-              value={roomData.price}
-              onChange={handleInputChange}
-              className="mt-1 block w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-white"
-              required
-            />
-          </div>
+            {/* Room Price */}
+            <div>
+              <label htmlFor="price" className="block text-sm font-medium text-gray-300">
+                Price per Night ($)
+              </label>
+              <input
+                type="number"
+                id="price"
+                name="price"
+                value={roomData.price}
+                onChange={handleInputChange}
+                className="mt-1 block w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-white"
+                required
+              />
+            </div>
 
-          {/* Amenities */}
-          <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-300">
-              Amenities
-            </label>
-            <div className="mt-2 flex flex-wrap gap-4">
-              {amenitiesOptions.map((amenity, index) => (
-                <div key={index} className="flex items-center gap-2">
+            {/* Amenities */}
+            <div>
+              <label className="block text-sm font-medium text-gray-300">
+                Amenities
+              </label>
+              <div className="mt-2 flex flex-wrap gap-3">
+                {amenitiesOptions.map((amenity, index) => (
+                  <div key={index} className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      id={amenity}
+                      value={amenity}
+                      checked={roomData.amenities.includes(amenity)}
+                      onChange={handleAmenitiesChange}
+                      className="w-4 h-4 text-yellow-400 bg-gray-700 border-gray-600 rounded focus:ring-yellow-400"
+                    />
+                    <label htmlFor={amenity} className="text-sm text-gray-300">
+                      {amenity}
+                    </label>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Capacity */}
+            <div>
+              <label htmlFor="capacity" className="block text-sm font-medium text-gray-300">
+                Capacity
+              </label>
+              <input
+                type="number"
+                id="capacity"
+                name="capacity"
+                value={roomData.capacity}
+                onChange={handleInputChange}
+                className="mt-1 block w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-white"
+                required
+              />
+            </div>
+
+            {/* Description */}
+            <div>
+              <label htmlFor="description" className="block text-sm font-medium text-gray-300">
+                Description
+              </label>
+              <textarea
+                id="description"
+                name="description"
+                value={roomData.description}
+                onChange={handleInputChange}
+                className="mt-1 block w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-white"
+                rows="3"
+                required
+              />
+            </div>
+
+            {/* Room Images */}
+            <div>
+              <label className="block text-sm font-medium text-gray-300">
+                Upload Images (Max 5)
+              </label>
+              <div className="mt-2">
+                <label
+                  htmlFor="images"
+                  className="cursor-pointer bg-yellow-400 text-gray-900 px-4 py-2 rounded-md font-semibold hover:bg-yellow-500 transition-colors"
+                >
+                  Choose Images
                   <input
-                    type="checkbox"
-                    id={amenity}
-                    value={amenity}
-                    checked={roomData.amenities.includes(amenity)}
-                    onChange={handleAmenitiesChange}
-                    className="w-4 h-4 text-yellow-400 bg-gray-700 border-gray-600 rounded focus:ring-yellow-400"
+                    type="file"
+                    id="images"
+                    name="images"
+                    onChange={handleImageUpload}
+                    className="hidden"
+                    multiple
+                    accept="image/*"
+                    required
                   />
-                  <label htmlFor={amenity} className="text-sm text-gray-300">
-                    {amenity}
-                  </label>
-                </div>
-              ))}
+                </label>
+              </div>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {roomData.images.map((image, index) => (
+                  <img
+                    key={index}
+                    src={URL.createObjectURL(image)}
+                    alt={`Room ${index}`}
+                    className="w-16 h-16 object-cover rounded-md"
+                  />
+                ))}
+              </div>
             </div>
-          </div>
 
-          {/* Capacity */}
-          <div className="mb-6">
-            <label htmlFor="capacity" className="block text-sm font-medium text-gray-300">
-              Capacity
-            </label>
-            <input
-              type="number"
-              id="capacity"
-              name="capacity"
-              value={roomData.capacity}
-              onChange={handleInputChange}
-              className="mt-1 block w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-white"
-              required
-            />
-          </div>
-
-          {/* Description */}
-          <div className="mb-6">
-            <label htmlFor="description" className="block text-sm font-medium text-gray-300">
-              Description
-            </label>
-            <textarea
-              id="description"
-              name="description"
-              value={roomData.description}
-              onChange={handleInputChange}
-              className="mt-1 block w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-white"
-              rows="4"
-              required
-            />
-          </div>
-
-          {/* Room Images */}
-          <div className="mb-6">
-            <label htmlFor="images" className="block text-sm font-medium text-gray-300">
-              Upload Images (Max 5)
-            </label>
-            <input
-              type="file"
-              id="images"
-              name="images"
-              onChange={handleImageUpload}
-              className="mt-1 block w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-white"
-              multiple
-              accept="image/*"
-              required
-            />
-            <div className="mt-2 flex flex-wrap gap-2">
-              {roomData.images.map((image, index) => (
-                <img
-                  key={index}
-                  src={URL.createObjectURL(image)} 
-                  alt={`Room ${index}`}
-                  className="w-20 h-20 object-cover rounded-md"
-                />
-              ))}
-            </div>
-          </div>
-
-          {/* Submit Button */}
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full p-2 bg-yellow-400 text-gray-900 font-semibold rounded-md hover:bg-yellow-500 transition-colors"
-          >
-            {loading ? "Adding Room..." : "Add Room"}
-          </button>
-        </form>
+            {/* Submit Button */}
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full p-2 bg-yellow-400 text-gray-900 font-semibold rounded-md hover:bg-yellow-500 transition-colors"
+            >
+              {loading ? "Adding Room..." : "Add Room"}
+            </button>
+          </form>
+        </div>
       </div>
     </>
   );
