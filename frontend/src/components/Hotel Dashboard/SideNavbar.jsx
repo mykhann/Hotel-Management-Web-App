@@ -78,6 +78,7 @@ const SideNavbar = () => {
           >
             <FaHotel /> Hotel Info
           </Link>
+        
         </nav>
 
         {/* Logout Button */}

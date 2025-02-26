@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { StarIcon, MapPinIcon, EnvelopeIcon } from "@heroicons/react/24/solid";
+import { StarIcon as StarIconSolid, MapPinIcon, EnvelopeIcon } from "@heroicons/react/24/solid";
+import { StarIcon as StarIconOutline } from "@heroicons/react/24/outline";
 import Navbar from "../shared/Navbar";
 import Footer from "../layout/Footer";
 import { useSelector } from "react-redux";
@@ -10,12 +11,13 @@ import axios from "axios";
 
 const ITEMS_PER_PAGE = 10;
 
-const HotelCard = () => {
+const HotelList = () => {
   useFetchAllHotels();
   const hotels = useSelector((state) => state.hotel.hotels);
   const user = useSelector((state) => state.auth.user);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
+  const [ratings, setRatings] = useState({}); 
   const navigate = useNavigate();
 
   const filteredHotels = hotels.filter(
@@ -49,6 +51,32 @@ const HotelCard = () => {
       console.error("Error deleting hotel:", error);
       toast.error(error.response?.data?.message || "Error deleting hotel");
     }
+  };
+
+  const handleRating = async (hotelId, rating) => {
+    try {
+      const response = await axios.post(
+        `http://localhost:5500/api/v1/rating/${hotelId}/rate`,
+        { rating },
+        { withCredentials: true }
+      );
+
+      if (response.data.success) {
+        toast.success(response.data.message);
+        setRatings((prev) => ({ ...prev, [hotelId]: rating })); // Update the rating in the UI
+      } else {
+        throw new Error(response.data.message || "Failed to submit rating");
+      }
+    } catch (error) {
+      console.error("Error submitting rating:", error);
+      toast.error(error.response?.data?.message || "Error submitting rating");
+    }
+  };
+
+  const hasCompletedBooking = (hotelId) => {
+    // Check if the user has a completed booking for this hotel
+    // Replace this with your actual logic to check booking status
+    return true; // Placeholder
   };
 
   return (
@@ -93,8 +121,23 @@ const HotelCard = () => {
                     <p>{hotel.email}</p>
                   </div>
                   <div className="flex items-center mt-1">
-                    <StarIcon className="w-4 h-4 text-yellow-400" />
-                    <span className="ml-1 text-sm">{hotel.averageRating || "N/A"} / 5</span>
+                    {[...Array(5)].map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => hasCompletedBooking(hotel._id) && handleRating(hotel._id, index + 1)}
+                        disabled={!hasCompletedBooking(hotel._id)}
+                        className="focus:outline-none"
+                      >
+                        {index < (ratings[hotel._id] || hotel.averageRating || 0) ? (
+                          <StarIconSolid className="w-4 h-4 text-yellow-400" />
+                        ) : (
+                          <StarIconOutline className="w-4 h-4 text-yellow-400" />
+                        )}
+                      </button>
+                    ))}
+                    <span className="ml-1 text-sm">
+                      ({ratings[hotel._id] || hotel.averageRating || "N/A"})
+                    </span>
                   </div>
                   <p className="text-gray-400 mt-1 text-xs">{hotel.description}</p>
                   <div className="flex items-center gap-2 mt-2 text-xs">
@@ -143,4 +186,4 @@ const HotelCard = () => {
   );
 };
 
-export default HotelCard;
+export default HotelList;

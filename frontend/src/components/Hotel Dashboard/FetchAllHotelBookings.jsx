@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { toast } from "react-toastify";
-import { FaEnvelope } from "react-icons/fa";
+import { FaEnvelope, FaEdit } from "react-icons/fa";
 import Footer from "../layout/Footer";
 import SideNavbar from "./SideNavbar";
 import UseHotelBookings from "../../customHooks/UseHotelBookings";
-import { ClipLoader } from "react-spinners"; // Import a spinner library
+import { ClipLoader } from "react-spinners";
 
 const FetchAllHotelBookings = () => {
   const { bookings, loading, error, cancelBooking } = UseHotelBookings();
@@ -41,7 +41,7 @@ const FetchAllHotelBookings = () => {
         <h2 className="text-2xl font-bold text-white mb-8">Room Bookings</h2>
         {loading ? (
           <div className="flex justify-center items-center h-64">
-            <ClipLoader color="#F59E0B" size={50} /> 
+            <ClipLoader color="#F59E0B" size={50} />
           </div>
         ) : error ? (
           <p className="text-center text-red-500">{error}</p>
@@ -77,6 +77,9 @@ const FetchAllHotelBookings = () => {
 };
 
 const BookingCard = ({ booking, cancelBooking }) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState(booking.status);
+
   const statusColors = {
     pending: "text-yellow-400",
     cancelled: "text-red-500",
@@ -84,12 +87,62 @@ const BookingCard = ({ booking, cancelBooking }) => {
     default: "text-gray-300",
   };
 
+  const handleStatusChange = async (status) => {
+    try {
+      const response = await fetch(`http://localhost:5500/api/v1/booking/update-booking/${booking._id}`, {
+        method: "PUT",
+        
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ status }),
+        credentials:"include"
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        toast.success(result.message);
+        setSelectedStatus(status); 
+      } else {
+        toast.error(result.message);
+      }
+    } catch (error) {
+      toast.error("An error occurred while updating the booking status.");
+    } finally {
+      setIsEditing(false); 
+    }
+  };
+
   return (
-    <div className="md:ml-28 w-full flex bg-gray-800 text-white shadow-md rounded-lg overflow-hidden border-2 border-transparent transition-all duration-300 hover:border-red-500 mb-4 p-3">
+    <div className="md:ml-28 w-full flex bg-gray-800 md:h-48 text-white shadow-md rounded-lg overflow-hidden border-2 border-transparent transition-all duration-300 hover:border-red-500 mb-4 p-3">
       <div className="w-full p-2 flex flex-col justify-between">
-        <p className="text-sm font-medium text-gray-300">
-          <span className="font-semibold">Guest:</span> {booking.user?.name || "N/A"}
-        </p>
+        <div className="flex justify-between items-start">
+          <p className="text-sm font-medium text-gray-300">
+            <span className="font-semibold">Guest:</span> {booking.user?.name || "N/A"}
+          </p>
+          <div className="relative">
+            <FaEdit
+              className="text-gray-400 cursor-pointer"
+              onClick={() => setIsEditing(!isEditing)}
+            />
+            {isEditing && (
+              <div className="absolute right-0 mt-2 w-40 bg-gray-700 rounded-lg shadow-lg z-auto">
+                <ul>
+                  {["pending", "confirmed", "cancelled", "completed"].map((status) => (
+                    <li
+                      key={status}
+                      className="px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 cursor-pointer"
+                      onClick={() => handleStatusChange(status)}
+                    >
+                      {status}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        </div>
 
         <div className="flex items-center gap-2 text-sm text-gray-300 mt-1">
           <FaEnvelope className="text-gray-400" />
@@ -98,10 +151,10 @@ const BookingCard = ({ booking, cancelBooking }) => {
 
         <div
           className={`flex items-center gap-1 text-sm font-semibold mt-1 ${
-            statusColors[booking.status] || statusColors.default
+            statusColors[selectedStatus] || statusColors.default
           }`}
         >
-          <p>{booking?.status || "N/A"}</p>
+          <p>{selectedStatus || "N/A"}</p>
         </div>
 
         <div className="mt-2 space-y-1">
@@ -112,17 +165,6 @@ const BookingCard = ({ booking, cancelBooking }) => {
             <span className="font-medium">Check-out:</span> {new Date(booking.checkOutDate).toDateString()}
           </p>
         </div>
-
-        {booking.status !== "Completed" && booking.status !== "Cancelled" && (
-          <div className="flex justify-center mt-3">
-            <button
-              onClick={() => cancelBooking(booking._id)}
-              className="bg-red-600 text-white px-3 py-1 text-sm rounded-md hover:bg-red-700 transition"
-            >
-              Cancel Booking
-            </button>
-          </div>
-        )}
       </div>
     </div>
   );

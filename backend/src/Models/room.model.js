@@ -1,4 +1,4 @@
-import mongoose, { mongo } from "mongoose";
+import mongoose from "mongoose";
 
 const roomSchema = new mongoose.Schema(
   {
@@ -7,12 +7,14 @@ const roomSchema = new mongoose.Schema(
       ref: "Hotel",
       required: true,
     },
-
     roomNumber: {
       type: String,
-
     },
-
+    type: {
+      type: String,
+      enum: ["Deluxe", "Single", "Superior"], 
+      required: true,
+    },
     price: {
       type: Number,
       required: true,
@@ -41,4 +43,3 @@ const roomSchema = new mongoose.Schema(
 );
 
 export const Room = mongoose.models.Room || mongoose.model("Room", roomSchema);
-
