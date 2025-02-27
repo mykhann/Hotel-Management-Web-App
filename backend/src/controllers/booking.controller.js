@@ -243,7 +243,7 @@ const getHotelBookings = asyncHandler(async (req, res) => {
     }
 
     // Fetch bookings for the hotel
-    const bookings = await Booking.find({ hotel: hotel._id })
+    const bookings = await Booking.find({ hotel: hotel._id }).sort({createdAt:-1})
         .populate("user", "name email")
         .populate("room", "type price");
 

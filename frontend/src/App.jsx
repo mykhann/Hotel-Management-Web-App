@@ -95,7 +95,7 @@ function App() {
           <RouterProvider router={router} />
           <ToastContainer
             position="bottom-right"
-            autoClose={700}
+            autoClose={3000}
             pauseOnHover
           />
         </NextUIProvider>

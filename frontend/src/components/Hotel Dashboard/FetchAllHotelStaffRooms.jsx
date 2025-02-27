@@ -138,8 +138,11 @@ const FetchAllHotelStaffRooms = () => {
 
   return (
     <>
-      <SideNavbar />
+      
       <div className="flex flex-col items-center p-8 bg-gray-900 min-h-screen text-white">
+        <div className="z-50">
+        <SideNavbar />
+        </div>
         <h1 className="text-3xl font-bold mb-8 md:ml-32 text-yellow-400">Rooms for Hotel</h1>
         {loading ? (
           <div className="flex justify-center items-center h-64">

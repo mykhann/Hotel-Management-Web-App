@@ -64,8 +64,10 @@ const HotelInfoCard = () => {
 
   return (
     <>
-      <SideNavbar />
       <div className="min-h-screen flex items-center justify-center bg-gray-900 p-4">
+      <div className="z-50">
+      <SideNavbar />
+      </div>
         {loading ? (
           <div className="flex justify-center items-center h-64">
             <ClipLoader color="#F59E0B" size={50} />

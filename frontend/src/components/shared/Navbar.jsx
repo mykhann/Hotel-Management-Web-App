@@ -24,7 +24,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="relative bg-gray-900 text-white shadow-lg py-6">
+    <nav className="relative bg-black text-white shadow-lg py-6">
       <div className="container mx-auto flex items-center justify-between px-6">
         <Link to="/" className="text-3xl font-extrabold tracking-wide text-gray-100">
           LOGO HERE
@@ -52,7 +52,7 @@ const Navbar = () => {
             </button>
           </div>
         ) : (
-          <Button onClick={() => navigate("/login")} className="hidden md:flex rounded-full bg-gray-800 hover:bg-gray-700 px-6 py-2 transition">
+          <Button onClick={() => navigate("/login")} className="hidden md:flex rounded-full bg-yellow-900 hover:bg-yellow-700 px-6 py-2 transition">
             Login
           </Button>
         )}
@@ -64,7 +64,7 @@ const Navbar = () => {
 
       {isOpen && (
         <div className="md:hidden bg-gray-900 text-white p-6 shadow-md space-y-4 text-center">
-          <Link to="/" className="block py-3 text-lg font-medium text-gray-300 hover:text-white transition">Doctors</Link>
+          <Link to="/hotels" className="block py-3 text-lg font-medium text-gray-300 hover:text-white transition"></Link>
           <Link to="/about" className="block py-3 text-lg font-medium text-gray-300 hover:text-white transition">About Us</Link>
           {user ? (
             <div className="space-y-3">

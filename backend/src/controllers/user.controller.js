@@ -7,40 +7,93 @@ import { isAuthenticated } from "../Middleware/isAuthenticated.middleware.js";
 
 // User registration 
 
+
 const RegisterUser = asyncHandler(async (req, res) => {
     const { name, email, password, phone, username } = req.body;
 
+    // Check if all fields are provided
     if (!name || !email || !password || !phone || !username) {
         return res.status(400).json({
             success: false,
-            message: "Please enter all fields"
+            message: "Please enter all fields",
         });
     }
 
+    // Name validation (min. 5 characters)
+    if (name.length < 5) {
+        return res.status(400).json({
+            success: false,
+            message: "Name must be at least 5 characters long",
+        });
+    }
+
+    // Username validation (min. 3 characters)
+    if (username.length < 3) {
+        return res.status(400).json({
+            success: false,
+            message: "Username must be at least 3 characters long",
+        });
+    }
+
+    // Email validation (valid email format)
+    const emailRegex = /^\S+@\S+\.\S+$/;
+    if (!emailRegex.test(email)) {
+        return res.status(400).json({
+            success: false,
+            message: "Invalid email format",
+        });
+    }
+
+    // Password validation (min. 8 characters, no other restrictions)
+    if (password.length < 8) {
+        return res.status(400).json({
+            success: false,
+            message: "Password must be at least 8 characters long",
+        });
+    }
+
+    // Phone number validation (exactly 10 digits)
+    const phoneRegex = /^\d{10}$/;
+    if (!phoneRegex.test(phone)) {
+        return res.status(400).json({
+            success: false,
+            message: "Phone number must be exactly 10 digits",
+        });
+    }
+
+    // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
         return res.status(400).json({
             success: false,
-            message: "User already exists"
+            message: "User already exists",
         });
     }
 
+    // Hash password
     const securePass = await bcrypt.hash(password, 10);
 
+    // Create user
     const user = await User.create({
         name,
         email,
         username,
         password: securePass,
-        phone
+        phone,
     });
 
-    res.status(200).json({
+    res.status(201).json({
         success: true,
         message: "User created successfully",
-        user
+        user,
     });
 });
+
+
+
+
+
+
 
 // User Login 
 

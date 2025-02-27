@@ -1,10 +1,10 @@
-import { Button } from "@material-tailwind/react";
-import axios from "axios";
 import React, { useState } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { Button } from "@material-tailwind/react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setHotels } from "../../reduxStore/HotelSlice";
-import { toast } from "react-toastify";
 
 const AddHotel = () => {
   const dispatch = useDispatch();
@@ -23,6 +23,7 @@ const AddHotel = () => {
   });
 
   const [imagePreview, setImagePreview] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const onChangeFileHandler = (e) => {
     const file = e.target.files[0];
@@ -41,6 +42,8 @@ const AddHotel = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    setLoading(true);
+
     const formData = new FormData();
     formData.append("name", input.name);
     formData.append("location", input.location);
@@ -61,6 +64,9 @@ const AddHotel = () => {
         formData,
         {
           withCredentials: true,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         }
       );
 
@@ -71,6 +77,8 @@ const AddHotel = () => {
       }
     } catch (error) {
       toast.error(error.response?.data?.message || "Something went wrong!");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -79,189 +87,59 @@ const AddHotel = () => {
   };
 
   return (
-    <div className="bg-gray-900 min-h-screen flex items-center justify-center p-4">
-      <div className="w-full max-w-2xl bg-gray-800 text-white rounded-lg shadow-lg hover:shadow-2xl transition duration-300 p-4">
-        <h2 className="text-2xl font-bold text-center mb-4">ADD A NEW HOTEL</h2>
-
-        <form onSubmit={submitHandler} className="space-y-3">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {/* Hotel Name */}
-            <div className="flex flex-col">
-              <label className="text-sm font-medium text-gray-300 mb-1">
-                Hotel Name
-              </label>
-              <input
-                type="text"
-                onChange={onChangeInputHandler}
-                value={input.name}
-                name="name"
-                className="w-full p-2 bg-gray-700 text-white border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-                placeholder="Enter hotel name"
-                required
-              />
+    <div className="min-h-screen bg-gray-900 text-white p-4 md:p-8">
+      <div className="max-w-2xl mx-auto bg-gray-800 rounded-lg shadow-lg p-6">
+        <h1 className="text-2xl md:text-3xl font-bold mb-6 text-yellow-400 text-center">
+          Add New Hotel
+        </h1>
+        <form onSubmit={submitHandler} className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-300">Hotel Name</label>
+              <input type="text" name="name" value={input.name} onChange={onChangeInputHandler} className="mt-1 block w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-white" required />
             </div>
-
-            {/* Location */}
-            <div className="flex flex-col">
-              <label className="text-sm font-medium text-gray-300 mb-1">
-                Location
-              </label>
-              <input
-                type="text"
-                onChange={onChangeInputHandler}
-                value={input.location}
-                name="location"
-                className="w-full p-2 bg-gray-700 text-white border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-                placeholder="Enter location"
-                required
-              />
-            </div>
-
-            {/* Description */}
-            <div className="col-span-2 flex flex-col">
-              <label className="text-sm font-medium text-gray-300 mb-1">
-                Description
-              </label>
-              <textarea
-                name="description"
-                rows="2"
-                value={input.description}
-                onChange={onChangeInputHandler}
-                className="w-full p-2 bg-gray-700 text-white border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-                placeholder="Enter hotel description"
-                required
-              />
-            </div>
-
-            {/* Phone */}
-            <div className="flex flex-col">
-              <label className="text-sm font-medium text-gray-300 mb-1">
-                Phone Number
-              </label>
-              <input
-                type="text"
-                onChange={onChangeInputHandler}
-                value={input.phone}
-                name="phone"
-                className="w-full p-2 bg-gray-700 text-white border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-                placeholder="Enter phone number"
-                required
-              />
-            </div>
-
-            {/* Hotel Email */}
-            <div className="flex flex-col">
-              <label className="text-sm font-medium text-gray-300 mb-1">
-                Hotel Email
-              </label>
-              <input
-                type="email"
-                value={input.email}
-                onChange={onChangeInputHandler}
-                name="email"
-                className="w-full p-2 bg-gray-700 text-white border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-                placeholder="Enter hotel email"
-                required
-              />
-            </div>
-
-            {/* Image Upload and Preview */}
-          
-
-            {/* Owner Name */}
-            <div className="flex flex-col">
-              <label className="text-sm font-medium text-gray-300 mb-1">
-                Owner Name
-              </label>
-              <input
-                type="text"
-                onChange={onChangeInputHandler}
-                value={input.ownerName}
-                name="ownerName"
-                className="w-full p-2 bg-gray-700 text-white border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-                placeholder="Enter owner name"
-                required
-              />
-            </div>
-
-
-
-            {/* Owner Email */}
-            <div className="flex flex-col">
-              <label className="text-sm font-medium text-gray-300 mb-1">
-                Owner Email
-              </label>
-              <input
-                type="email"
-                value={input.ownerEmail}
-                onChange={onChangeInputHandler}
-                name="ownerEmail"
-                className="w-full p-2 bg-gray-700 text-white border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-                placeholder="Enter owner email"
-                required
-              />
-            </div>
-
-            {/* Owner Password */}
-            <div className="flex flex-col">
-              <label className="text-sm font-medium text-gray-300 mb-1">
-                Owner Password
-              </label>
-              <input
-                type="password"
-                value={input.ownerPassword}
-                onChange={onChangeInputHandler}
-                name="ownerPassword"
-                className="w-full p-2 bg-gray-700 text-white border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-                placeholder="Enter owner password"
-                required
-              />
-            </div>
-            <div className="col-span-2 flex flex-col">
-              <label className="text-sm font-medium text-gray-300 mb-1">
-                Hotel Image
-              </label>
-              <div className="flex items-center justify-center w-full">
-                <label className="flex flex-col items-center px-4 py-2 bg-gray-700 text-white rounded-lg border border-gray-600 cursor-pointer hover:bg-gray-600 transition duration-200">
-                  <span className="text-sm">
-                    {input.image ? input.image.name : "Choose File"}
-                  </span>
-                  <input
-                    type="file"
-                    name="image"
-                    accept="image/*"
-                    onChange={onChangeFileHandler}
-                    className="hidden"
-                    required
-                  />
-                </label>
-              </div>
-              {imagePreview && (
-                <div className="mt-2">
-                  <img
-                    src={imagePreview}
-                    alt="Hotel Preview"
-                    className="w-32 h-32 object-cover rounded-lg"
-                  />
-                </div>
-              )}
+            <div>
+              <label className="block text-sm font-medium text-gray-300">Location</label>
+              <input type="text" name="location" value={input.location} onChange={onChangeInputHandler} className="mt-1 block w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-white" required />
             </div>
           </div>
 
-          {/* Buttons */}
-          <div className="flex justify-end gap-4 mt-4">
-            <Button
-              onClick={handleCancel}
-              className="bg-red-600 text-white px-6 py-2 rounded-md shadow-md transform transition-all duration-300 hover:bg-red-700 hover:scale-105 hover:shadow-lg"
-            >
-              Cancel
-            </Button>
-            <Button
-              type="submit"
-              className="bg-blue-600 text-white px-6 py-2 rounded-md shadow-md transform transition-all duration-300 hover:bg-blue-700 hover:scale-105 hover:shadow-lg"
-            >
-              Submit
-            </Button>
+          <div>
+            <label className="block text-sm font-medium text-gray-300">Description</label>
+            <textarea name="description" value={input.description} onChange={onChangeInputHandler} className="mt-1 block w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-white" rows="2" required />
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-300">Phone Number</label>
+              <input type="text" name="phone" value={input.phone} onChange={onChangeInputHandler} className="mt-1 block w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-white" required />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-300">Hotel Email</label>
+              <input type="email" name="email" value={input.email} onChange={onChangeInputHandler} className="mt-1 block w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-white" required />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-300">Owner Name</label>
+              <input type="text" name="ownerName" value={input.ownerName} onChange={onChangeInputHandler} className="mt-1 block w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-white" required />
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <input type="email" name="ownerEmail" value={input.ownerEmail} onChange={onChangeInputHandler} placeholder="Owner Email" className="mt-1 p-2 bg-gray-700 border border-gray-600 rounded-md text-white w-full" required />
+              <input type="password" name="ownerPassword" value={input.ownerPassword} onChange={onChangeInputHandler} placeholder="Owner Password" className="mt-1 p-2 bg-gray-700 border border-gray-600 rounded-md text-white w-full" required />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-300">Hotel Image</label>
+            <input type="file" name="image" onChange={onChangeFileHandler} accept="image/*" className="mt-1 block w-full text-white" required />
+            {imagePreview && <img src={imagePreview} alt="Preview" className="mt-2 w-32 h-32 object-cover rounded-md" />}
+          </div>
+
+          <div className="flex justify-end gap-4 mt-6">
+            <Button onClick={handleCancel} className="bg-red-600 text-white px-6 py-2 rounded-md">Cancel</Button>
+            <Button type="submit" disabled={loading} className="bg-blue-600 text-white px-6 py-2 rounded-md">{loading ? "Adding..." : "Add Hotel"}</Button>
           </div>
         </form>
       </div>

@@ -62,21 +62,23 @@ const HotelDashboardUi = () => {
   ];
 
   return (
-    <div className="flex bg-gradient-to-r bg-gray-900 min-h-screen">
-      <SideNavbar handleLogout={handleLogout} className="w-64 fixed h-full" />
+    <div className="flex flex-col md:flex-row bg-gradient-to-r bg-gray-900 min-h-screen">
+      {/* SideNavbar */}
+      <SideNavbar handleLogout={handleLogout} className="w-full md:w-64 fixed h-full" />
 
-      <div className="flex-1 p-6 ml-64">
-        <div className="bg-gray-800 p-6 rounded-lg shadow-lg flex flex-col md:flex-row md:items-center md:justify-between">
+      {/* Main Content */}
+      <div className="flex-1 p-4 md:p-6 md:ml-64 mt-16 md:mt-0">
+        {/* Hotel Info Section */}
+        <div className="bg-gray-800 p-4 md:p-6 rounded-lg shadow-lg flex flex-col md:flex-row md:items-center md:justify-between">
           <Link to="/hotel/view-hotel">
-            {" "}
             <div className="flex items-center">
               <img
                 src={hotel?.images?.[0] || "https://via.placeholder.com/150"}
                 alt={hotel?.name || "Hotel"}
-                className="w-20 h-20 rounded-lg mr-4 object-cover"
+                className="w-16 h-16 md:w-20 md:h-20 rounded-lg mr-4 object-cover"
               />
               <div>
-                <h1 className="text-3xl font-bold text-white">
+                <h1 className="text-2xl md:text-3xl font-bold text-white">
                   {hotel?.name || "Hotel Name"}
                 </h1>
                 <p className="text-sm text-gray-400">
@@ -87,9 +89,9 @@ const HotelDashboardUi = () => {
           </Link>
         </div>
 
-        {/* Booking Chart */}
-        <div className="bg-gray-800 p-6 rounded-lg shadow-lg mt-6">
-          <h2 className="text-xl font-semibold text-white mb-4">
+        {/* Booking Chart Section */}
+        <div className="bg-gray-800 p-4 md:p-6 rounded-lg shadow-lg mt-4 md:mt-6">
+          <h2 className="text-lg md:text-xl font-semibold text-white mb-4">
             Bookings Overview
           </h2>
           <ResponsiveContainer width="100%" height={220}>
@@ -104,8 +106,9 @@ const HotelDashboardUi = () => {
           </ResponsiveContainer>
         </div>
 
-        <div className="mt-6">
-          <LatestHotelBookings />
+        {/* Latest Bookings Section */}
+        <div className="mt-4 md:mt-6">
+      
         </div>
       </div>
     </div>

@@ -69,11 +69,7 @@ const Login = () => {
               Login
             </button>
           </form>
-          <p className="font-medium text-gray-300 text-center mb-4">
-            <Link to="/doctor/login">
-              <span className="text-yellow-400 hover:text-yellow-500 transition-colors duration-300">Login</span>
-            </Link> as a doctor
-          </p>
+          
           <div className="flex justify-center">
             <Link to="/signup">
               <p className="font-medium text-gray-300 hover:text-yellow-400 transition-colors duration-300">

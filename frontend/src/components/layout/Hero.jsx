@@ -21,8 +21,8 @@ const Hero = () => {
         </p>
         <div className="flex flex-col md:flex-row items-center justify-center gap-4">
           <Link to="/hotels"> 
-            <button className="bg-teal-500 hover:bg-teal-600 text-white px-6 py-3 rounded-lg shadow-lg hover:scale-105 transition-transform text-lg font-semibold">
-              Explore Hotels
+            <button className="bg-yellow-900 hover:bg-yellow-800 text-white px-6 py-3 rounded-lg shadow-lg hover:scale-105 transition-transform text-lg font-semibold">
+              BOOK ROOM
             </button>
           </Link>
           <Link to="/about"> 
