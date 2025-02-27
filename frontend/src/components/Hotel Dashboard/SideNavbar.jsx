@@ -9,20 +9,18 @@ import {
   FaBars,
   FaTimes,
 } from "react-icons/fa";
-import { useDispatch, useSelector } from "react-redux";
-
-import { logout, setUser } from "../../reduxStore/authSlice";
+import { useDispatch } from "react-redux";
+import { logout } from "../../reduxStore/authSlice";
 
 const SideNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const user = useSelector((store) => store.auth.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     dispatch(logout());
     localStorage.removeItem("token");
-    navigate("/login")
+    navigate("/login");
   };
 
   return (
@@ -44,7 +42,7 @@ const SideNavbar = () => {
         {/* Logo */}
         <div className="mb-10 flex items-center">
           <FaHotel className="text-3xl text-blue-500 mr-2" />
-          <Link to="/hotel">
+          <Link to="/hotel-dashboard">
             <h1 className="text-2xl font-bold">Hotel Admin</h1>
           </Link>
         </div>
@@ -78,7 +76,6 @@ const SideNavbar = () => {
           >
             <FaHotel /> Hotel Info
           </Link>
-        
         </nav>
 
         {/* Logout Button */}

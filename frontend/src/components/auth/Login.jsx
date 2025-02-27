@@ -18,21 +18,27 @@ const Login = () => {
   const onChangeInput = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
   };
-
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
       const res = await axios.post("http://localhost:5500/api/v1/user/login", input, { withCredentials: true });
+  
       if (res.data.success) {
         toast.success(res.data.message);
-        navigate("/");
         dispatch(setUser(res.data.user));
+  
+        // Check user role and navigate accordingly
+        if (res.data.user.role === "hotelOwner") {
+          navigate("/hotel-dashboard"); 
+        } else {
+          navigate("/"); 
+        }
       }
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error.response?.data?.message || "Login failed");
     }
   };
-
+  
   return (
     <>
       <Navbar />

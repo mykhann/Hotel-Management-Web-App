@@ -78,7 +78,7 @@ const router = createBrowserRouter([
   { path: "/admin/view-rooms", element: <FetchAllRooms />, errorElement: <ErrorPage /> },
 
   // Hotel Dashboard 
-  { path: "/hotel", element: <HoteldashboardUi />, errorElement: <ErrorPage /> },
+  { path: "/hotel-dashboard", element: <HoteldashboardUi />, errorElement: <ErrorPage /> },
   { path: "/hotel/view-rooms", element: <FetchAllHotelStaffRooms />, errorElement: <ErrorPage /> },
   { path: "/hotel/view-bookings", element: <FetchAllHotelBookings />, errorElement: <ErrorPage /> },
   { path: "/hotel/view-hotel", element: <HotelInfoCard />, errorElement: <ErrorPage /> },

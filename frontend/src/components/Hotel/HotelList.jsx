@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MapPinIcon, EnvelopeIcon } from "@heroicons/react/24/solid";
-import ReactStars from "react-rating-stars-component"; // Import the star rating component
+import ReactStars from "react-rating-stars-component";
 import Navbar from "../shared/Navbar";
 import Footer from "../layout/Footer";
 import { useSelector } from "react-redux";
 import useFetchAllHotels from "../../customHooks/useFetchAllHotels";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { FaPhone } from "react-icons/fa";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -17,7 +18,7 @@ const HotelCard = () => {
   const user = useSelector((state) => state.auth.user);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
-  const [ratings, setRatings] = useState({}); // Store ratings for each hotel
+  const [ratings, setRatings] = useState({}); // Store user ratings
   const navigate = useNavigate();
 
   const filteredHotels = hotels.filter(
@@ -63,7 +64,7 @@ const HotelCard = () => {
 
       if (response.data.success) {
         toast.success(response.data.message);
-        setRatings((prev) => ({ ...prev, [hotelId]: rating })); // Update the rating in the UI
+        setRatings((prev) => ({ ...prev, [hotelId]: rating })); // Update rating in state
       } else {
         throw new Error(response.data.message || "Failed to submit rating");
       }
@@ -74,8 +75,8 @@ const HotelCard = () => {
   };
 
   const hasCompletedBooking = (hotelId) => {
-    // Check if the user has a completed booking for this hotel
-    // Replace this with your actual logic to check booking status
+    // Replace this with your actual logic to check if the user has a completed booking for this hotel
+    // For now, return true for demonstration purposes
     return true; // Placeholder
   };
 
@@ -120,25 +121,25 @@ const HotelCard = () => {
                     <EnvelopeIcon className="w-4 h-4 text-blue-500" />
                     <p>{hotel.email}</p>
                   </div>
+                  <div className="flex items-center gap-1 text-sm text-gray-300">
+                    <FaPhone className="w-4 h-4 text-blue-500" />
+                    <p>{hotel.phone}</p>
+                  </div>
                   <div className="flex items-center mt-1">
                     <ReactStars
                       count={5} // Number of stars
-                      value={ratings[hotel._id] || hotel.averageRating || 0} // Current rating
-                      onChange={(rating) => handleRating(hotel._id, rating)} // Callback when a star is clicked
-                      size={24} // Size of the stars
-                      activeColor="#ffd700" // Color of the active stars
+                      value={ratings[hotel._id] || hotel.averageRating || 0} // Use user rating or average rating
+                      onChange={(rating) => handleRating(hotel._id, rating)} // Handle rating change
+                      size={24}
+                      activeColor="#ffd700" // Gold color for stars
                       isHalf={false} // Disable half stars
-                      edit={hasCompletedBooking(hotel._id)} // Enable/disable editing
+                      edit={hasCompletedBooking(hotel._id)} // Allow editing only if booking is completed
                     />
                     <span className="ml-1 text-sm">
-                      ({ratings[hotel._id] || hotel.averageRating || "N/A"})
+                      ({hotel.ratings?.length || 0}) {/* Display number of ratings */}
                     </span>
                   </div>
                   <p className="text-gray-400 mt-1 text-xs">{hotel.description}</p>
-                  <div className="flex items-center gap-2 mt-2 text-xs">
-                    <span className="bg-green-600 px-2 py-1 rounded-md">Free Parking</span>
-                    <span className="bg-blue-600 px-2 py-1 rounded-md">Free Wi-Fi</span>
-                  </div>
                 </div>
                 <div className="flex justify-center mt-3">
                   <button
