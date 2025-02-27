@@ -5,8 +5,9 @@ import Footer from "../layout/Footer";
 import SideNavbar from "./SideNavbar";
 import UseHotelBookings from "../../customHooks/UseHotelBookings";
 import { ClipLoader } from "react-spinners";
-import { setBooking } from "../../reduxStore/HotelSlice";
-
+import {  setBooking } from "../../reduxStore/HotelSlice";
+import axios from "axios";
+import { useDispatch } from "react-redux";
 const FetchAllHotelBookings = () => {
   const { bookings, loading, error, cancelBooking } = UseHotelBookings();
 
@@ -88,39 +89,28 @@ const BookingCard = ({ booking, cancelBooking }) => {
     default: "text-gray-300",
   };
 
+ 
+
+  const dispatch = useDispatch();
   const handleStatusChange = async (status) => {
+  
     try {
-      const response = await fetch(
+      const response = await axios.put(
         `http://localhost:5500/api/v1/booking/update-booking/${booking._id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ status }),
-          credentials: "include",
-        }
+        { status },
+        { withCredentials: true }
       );
   
-      const result = await response.json();
+      toast.success(response.data.message);
   
-      if (response.ok) {
-        toast.success(result.message);
-  
-        // Update the booking status in the local state
-        setBooking((prevBookings) =>
-          prevBookings.map((b) =>
-            b._id === booking._id ? { ...b, status: status } : b
-          )
-        );
-      } else {
-        throw new Error(result.message || "Failed to update booking status");
-      }
+      // Dispatch Redux action to update booking status
+      dispatch(setBooking({ bookingId: booking._id, status }));
     } catch (error) {
       console.error("Error updating booking status:", error);
-      toast.error(error.message || "Error updating booking status");
+      toast.error(error.response?.data?.message || "Error updating booking status");
     }
   };
+  
 
   return (
     <div className="md:ml-28 w-full flex bg-gray-800 md:h-48 text-white shadow-md rounded-lg overflow-hidden border-2 border-transparent transition-all duration-300 hover:border-red-500 mb-4 p-3">

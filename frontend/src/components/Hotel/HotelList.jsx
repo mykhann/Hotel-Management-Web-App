@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { MapPinIcon, EnvelopeIcon } from "@heroicons/react/24/solid";
 import ReactStars from "react-rating-stars-component";
@@ -18,8 +18,27 @@ const HotelCard = () => {
   const user = useSelector((state) => state.auth.user);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
-  const [ratings, setRatings] = useState({}); // Store user ratings
+  const [ratings, setRatings] = useState({});
+  const [bookings, setBookings] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchBookings = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5500/api/v1/booking/get",
+          {
+            withCredentials: true,
+          }
+        );
+        setBookings(response.data.bookings);
+      } catch (error) {
+        console.error("Error fetching bookings:", error);
+      }
+    };
+
+    fetchBookings();
+  }, []);
 
   const filteredHotels = hotels.filter(
     (hotel) =>
@@ -64,7 +83,7 @@ const HotelCard = () => {
 
       if (response.data.success) {
         toast.success(response.data.message);
-        setRatings((prev) => ({ ...prev, [hotelId]: rating })); // Update rating in state
+        setRatings((prev) => ({ ...prev, [hotelId]: rating }));
       } else {
         throw new Error(response.data.message || "Failed to submit rating");
       }
@@ -75,9 +94,18 @@ const HotelCard = () => {
   };
 
   const hasCompletedBooking = (hotelId) => {
-    // Replace this with your actual logic to check if the user has a completed booking for this hotel
-    // For now, return true for demonstration purposes
-    return true; // Placeholder
+    console.log("User ID from Redux:", user?._id);
+    console.log("Fetched Bookings:", bookings);
+
+    return bookings.some((booking) => {
+      const isMatch =
+        booking.user._id?.toString() === user?._id?.toString() &&
+        booking.hotel?._id?.toString() === hotelId?.toString() &&
+        booking.status?.toLowerCase() === "completed";
+
+      console.log("Does this booking match?", isMatch);
+      return isMatch;
+    });
   };
 
   return (
@@ -106,7 +134,9 @@ const HotelCard = () => {
                 </button>
               )}
               <img
-                src={hotel.images || "https://source.unsplash.com/450x300/?hotel"}
+                src={
+                  hotel.images || "https://source.unsplash.com/450x300/?hotel"
+                }
                 alt={hotel.name}
                 className="w-1/3 object-cover"
               />
@@ -127,19 +157,24 @@ const HotelCard = () => {
                   </div>
                   <div className="flex items-center mt-1">
                     <ReactStars
-                      count={5} // Number of stars
-                      value={ratings[hotel._id] || hotel.averageRating || 0} // Use user rating or average rating
-                      onChange={(rating) => handleRating(hotel._id, rating)} // Handle rating change
+                      key={`stars-${hotel._id}-${hasCompletedBooking(
+                        hotel._id
+                      )}`}
+                      count={5}
+                      value={ratings[hotel._id] || hotel.averageRating || 0}
+                      onChange={(rating) => handleRating(hotel._id, rating)}
                       size={24}
-                      activeColor="#ffd700" // Gold color for stars
-                      isHalf={false} // Disable half stars
-                      edit={hasCompletedBooking(hotel._id)} // Allow editing only if booking is completed
+                      activeColor="#ffd700"
+                      isHalf={false}
+                      edit={hasCompletedBooking(hotel._id)}
                     />
                     <span className="ml-1 text-sm">
-                      ({hotel.ratings?.length || 0}) {/* Display number of ratings */}
+                      ( {hotel.ratings?.length || 0} reviews)
                     </span>
                   </div>
-                  <p className="text-gray-400 mt-1 text-xs">{hotel.description}</p>
+                  <p className="text-gray-400 mt-1 text-xs">
+                    {hotel.description}
+                  </p>
                 </div>
                 <div className="flex justify-center mt-3">
                   <button
@@ -160,7 +195,9 @@ const HotelCard = () => {
         <div className="flex justify-center gap-4 pb-6">
           <button
             className={`px-3 py-1.5 rounded-md bg-gray-600 text-white transition ${
-              currentPage === 1 ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-700"
+              currentPage === 1
+                ? "opacity-50 cursor-not-allowed"
+                : "hover:bg-gray-700"
             }`}
             disabled={currentPage === 1}
             onClick={() => setCurrentPage(currentPage - 1)}

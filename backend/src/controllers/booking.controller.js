@@ -213,7 +213,7 @@ const getUserBookings = asyncHandler(async (req, res) => {
  
     const bookings = await Booking.find({ user: userId }).sort({createdAt:-1})
         .populate("room", "roomNumber price")
-        .populate("hotel", "name images email location");
+        .populate("hotel user", "name images email location");
 
     if (!bookings || bookings.length === 0) {
         return res.status(404).json({

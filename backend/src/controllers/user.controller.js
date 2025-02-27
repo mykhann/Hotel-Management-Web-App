@@ -134,7 +134,8 @@ const LoginUser = asyncHandler(async (req, res) => {
         email: user.email,
         username:user.username,
         phone:user.phone,
-        role: user.role
+        role: user.role,
+        _id:user._id
     };
 
     const cookieOptions = {

@@ -10,14 +10,17 @@ const BookingHistory = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const user = useSelector((store)=>store.auth.user)
+  const user = useSelector((store) => store.auth.user);
 
   useEffect(() => {
     const fetchBookingHistory = async () => {
       try {
-        const { data } = await axios.get("http://localhost:5500/api/v1/booking/get", {
-          withCredentials: true,
-        });
+        const { data } = await axios.get(
+          "http://localhost:5500/api/v1/booking/get",
+          {
+            withCredentials: true,
+          }
+        );
         setBookings(data.bookings);
       } catch (err) {
         setError(err.response?.data?.message || "Failed to fetch bookings");
@@ -38,7 +41,9 @@ const BookingHistory = () => {
 
       if (response.data.success) {
         toast.success("Booking canceled successfully");
-        setBookings((prev) => prev.filter((booking) => booking._id !== bookingId));
+        setBookings((prev) =>
+          prev.filter((booking) => booking._id !== bookingId)
+        );
       } else {
         toast.error(response.data.message || "Failed to cancel booking");
       }
@@ -52,10 +57,11 @@ const BookingHistory = () => {
 
   return (
     <>
-     {user?.role === "user" && <Navbar />}
-     {user?.role === "hotelOwner" && <SideNavbar handleLogout={handleLogout} />}
+      {user?.role === "user" && <Navbar />}
+      {user?.role === "hotelOwner" && (
+        <SideNavbar handleLogout={handleLogout} />
+      )}
 
-     
       <div className="flex flex-col items-center gap-4 p-4 bg-gray-900 min-h-screen">
         <h2 className="text-2xl font-bold text-white mb-8">Booking History</h2>
         {bookings.length === 0 ? (
@@ -66,17 +72,20 @@ const BookingHistory = () => {
               key={booking._id}
               className="w-full max-w-3xl flex bg-gray-800 text-white shadow-md rounded-lg overflow-hidden border-2 border-transparent transition-all duration-300 hover:border-red-500"
             >
-             
               <img
-                src={booking.hotel?.images || "https://source.unsplash.com/450x300/?hotel"}
+                src={
+                  booking.hotel?.images ||
+                  "https://source.unsplash.com/450x300/?hotel"
+                }
                 alt={booking.hotel?.name || "Hotel Image"}
                 className="w-1/3 object-cover"
               />
 
-            
               <div className="w-2/3 p-4 flex flex-col justify-between">
                 <div>
-                  <h2 className="text-xl font-semibold">{booking.hotel?.name || "N/A"}</h2>
+                  <h2 className="text-xl font-semibold">
+                    {booking.hotel?.name || "N/A"}
+                  </h2>
 
                   {/* Location with Icon */}
                   <div className="flex items-center gap-1 text-sm text-gray-300">
@@ -101,7 +110,8 @@ const BookingHistory = () => {
                       {new Date(booking.checkOutDate).toDateString()}
                     </p>
                     <p className="text-gray-400">
-                      <span className="font-medium">Total Price:</span> ${booking.totalPrice}
+                      <span className="font-medium">Total Price:</span> $
+                      {booking.totalPrice}
                     </p>
                     <p className="text-gray-400">
                       <span className="font-medium">Status:</span>{" "}
@@ -121,16 +131,17 @@ const BookingHistory = () => {
                 </div>
 
                 {/* Cancel Booking Button */}
-                {booking.status !== "Completed" && booking.status !== "Cancelled" && (
-                  <div className="flex justify-center mt-3">
-                    <button
-                      onClick={() => cancelBooking(booking._id)}
-                      className="bg-red-600 text-white px-4 py-2 w-full rounded-md hover:bg-red-700 transition"
-                    >
-                      Cancel Booking
-                    </button>
-                  </div>
-                )}
+                {booking.status !== "Completed" &&
+                  booking.status !== "Cancelled" && (
+                    <div className="flex justify-center mt-3">
+                      <button
+                        onClick={() => cancelBooking(booking._id)}
+                        className="bg-red-600 text-white px-4 py-2 w-full rounded-md hover:bg-red-700 transition"
+                      >
+                        Cancel Booking
+                      </button>
+                    </div>
+                  )}
               </div>
             </div>
           ))

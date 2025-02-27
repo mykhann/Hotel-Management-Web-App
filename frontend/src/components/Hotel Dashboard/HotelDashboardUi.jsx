@@ -14,7 +14,7 @@ import {
 } from "recharts";
 import useHotelData from "../../customHooks/UseHotelData";
 import UseHotelBookings from "../../customHooks/UseHotelBookings";
-import LatestHotelBookings from "./LatestHotelBookings";
+
 import SideNavbar from "./SideNavbar";
 
 const HotelDashboardUi = () => {
