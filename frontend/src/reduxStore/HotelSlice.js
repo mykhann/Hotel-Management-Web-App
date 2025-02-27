@@ -8,6 +8,7 @@
             hotelRooms: [],
             singleHotelRoom:null,
             bookings:[],
+            booking:null
           
 
         },
@@ -22,6 +23,9 @@
                 state.hotelRooms = action.payload;
             },
             setBooking:(state,action)=>{
+                state.booking=action.payload
+            },
+            setBookings:(state,action)=>{
                 state.bookings=action.payload
             },
             setSingleHotelRoom:(state,action)=>{
@@ -31,4 +35,4 @@
     });
 
     export default hotelSlice.reducer;
-    export const { setHotels, setSingleHotel, setHotelRooms,setBooking,setSingleHotelRoom } = hotelSlice.actions;
+    export const { setHotels, setSingleHotel, setHotelRooms,setBooking,setSingleHotelRoom ,setBookings} = hotelSlice.actions;

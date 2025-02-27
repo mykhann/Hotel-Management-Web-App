@@ -104,7 +104,7 @@ const Signup = () => {
 
             <button
               type="submit"
-              className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white p-3 rounded-lg hover:from-purple-700 hover:to-indigo-700 transition-all duration-300"
+              className="w-full bg-gradient-to-r from-yellow-900 to-yellow-800 text-white p-3 rounded-lg hover:from-purple-700 hover:to-indigo-700 transition-all duration-300"
             >
               Sign Up
             </button>

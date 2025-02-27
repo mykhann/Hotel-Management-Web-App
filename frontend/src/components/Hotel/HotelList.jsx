@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { StarIcon as StarIconSolid, MapPinIcon, EnvelopeIcon } from "@heroicons/react/24/solid";
-import { StarIcon as StarIconOutline } from "@heroicons/react/24/outline";
+import { MapPinIcon, EnvelopeIcon } from "@heroicons/react/24/solid";
+import ReactStars from "react-rating-stars-component"; // Import the star rating component
 import Navbar from "../shared/Navbar";
 import Footer from "../layout/Footer";
 import { useSelector } from "react-redux";
@@ -11,13 +11,13 @@ import axios from "axios";
 
 const ITEMS_PER_PAGE = 10;
 
-const HotelList = () => {
+const HotelCard = () => {
   useFetchAllHotels();
   const hotels = useSelector((state) => state.hotel.hotels);
   const user = useSelector((state) => state.auth.user);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
-  const [ratings, setRatings] = useState({}); 
+  const [ratings, setRatings] = useState({}); // Store ratings for each hotel
   const navigate = useNavigate();
 
   const filteredHotels = hotels.filter(
@@ -121,20 +121,15 @@ const HotelList = () => {
                     <p>{hotel.email}</p>
                   </div>
                   <div className="flex items-center mt-1">
-                    {[...Array(5)].map((_, index) => (
-                      <button
-                        key={index}
-                        onClick={() => hasCompletedBooking(hotel._id) && handleRating(hotel._id, index + 1)}
-                        disabled={!hasCompletedBooking(hotel._id)}
-                        className="focus:outline-none"
-                      >
-                        {index < (ratings[hotel._id] || hotel.averageRating || 0) ? (
-                          <StarIconSolid className="w-4 h-4 text-yellow-400" />
-                        ) : (
-                          <StarIconOutline className="w-4 h-4 text-yellow-400" />
-                        )}
-                      </button>
-                    ))}
+                    <ReactStars
+                      count={5} // Number of stars
+                      value={ratings[hotel._id] || hotel.averageRating || 0} // Current rating
+                      onChange={(rating) => handleRating(hotel._id, rating)} // Callback when a star is clicked
+                      size={24} // Size of the stars
+                      activeColor="#ffd700" // Color of the active stars
+                      isHalf={false} // Disable half stars
+                      edit={hasCompletedBooking(hotel._id)} // Enable/disable editing
+                    />
                     <span className="ml-1 text-sm">
                       ({ratings[hotel._id] || hotel.averageRating || "N/A"})
                     </span>
@@ -186,4 +181,4 @@ const HotelList = () => {
   );
 };
 
-export default HotelList;
+export default HotelCard;

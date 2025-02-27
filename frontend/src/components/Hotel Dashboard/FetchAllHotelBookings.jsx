@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
-import { FaEnvelope, FaEdit } from "react-icons/fa";
+import { FaEnvelope, FaEdit, FaTrash } from "react-icons/fa";
 import Footer from "../layout/Footer";
 import SideNavbar from "./SideNavbar";
 import UseHotelBookings from "../../customHooks/UseHotelBookings";
 import { ClipLoader } from "react-spinners";
+import { setBooking } from "../../reduxStore/HotelSlice";
 
 const FetchAllHotelBookings = () => {
   const { bookings, loading, error, cancelBooking } = UseHotelBookings();
@@ -89,28 +90,35 @@ const BookingCard = ({ booking, cancelBooking }) => {
 
   const handleStatusChange = async (status) => {
     try {
-      const response = await fetch(`http://localhost:5500/api/v1/booking/update-booking/${booking._id}`, {
-        method: "PUT",
-        
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ status }),
-        credentials:"include"
-      });
-
+      const response = await fetch(
+        `http://localhost:5500/api/v1/booking/update-booking/${booking._id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ status }),
+          credentials: "include",
+        }
+      );
+  
       const result = await response.json();
-
+  
       if (response.ok) {
         toast.success(result.message);
-        setSelectedStatus(status); 
+  
+        // Update the booking status in the local state
+        setBooking((prevBookings) =>
+          prevBookings.map((b) =>
+            b._id === booking._id ? { ...b, status: status } : b
+          )
+        );
       } else {
-        toast.error(result.message);
+        throw new Error(result.message || "Failed to update booking status");
       }
     } catch (error) {
-      toast.error("An error occurred while updating the booking status.");
-    } finally {
-      setIsEditing(false); 
+      console.error("Error updating booking status:", error);
+      toast.error(error.message || "Error updating booking status");
     }
   };
 
@@ -125,13 +133,13 @@ const BookingCard = ({ booking, cancelBooking }) => {
             <FaEdit
               className="text-gray-400 cursor-pointer"
               onClick={() => setIsEditing(!isEditing)}
-            />
+              />
             {isEditing && (
               <div className="absolute right-0 mt-2 w-40 bg-gray-700 rounded-lg shadow-lg z-auto">
                 <ul>
                   {["pending", "confirmed", "cancelled", "completed"].map((status) => (
                     <li
-                      key={status}
+                    key={status}
                       className="px-4 py-2 text-sm text-gray-300 hover:bg-gray-600 cursor-pointer"
                       onClick={() => handleStatusChange(status)}
                     >
