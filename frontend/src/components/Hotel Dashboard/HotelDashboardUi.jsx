@@ -53,6 +53,13 @@ const HotelDashboardUi = () => {
     (booking) => booking.status === "cancelled"
   );
 
+  // Calculate Total Revenue from Completed Bookings
+  const totalRevenue = bookings
+  .filter(booking => booking.status === "completed")
+  .reduce((sum, booking) => sum + booking.totalPrice, 0);
+
+
+
   // Chart Data
   const chartData = [
     { name: "Total Bookings", value: bookings.length },
@@ -89,6 +96,19 @@ const HotelDashboardUi = () => {
           </Link>
         </div>
 
+        {/* Total Revenue Section */}
+        <div className="bg-gray-800 p-4 md:p-6 rounded-lg shadow-lg mt-4 md:mt-6">
+          <h2 className="text-lg md:text-xl font-semibold text-white mb-4">
+            Total Revenue
+          </h2>
+          <div className="flex items-center justify-between">
+            <p className="text-2xl md:text-3xl font-bold text-yellow-400">
+              ${totalRevenue.toLocaleString()}
+            </p>
+            <span className="text-sm text-gray-400">From Completed Bookings</span>
+          </div>
+        </div>
+
         {/* Booking Chart Section */}
         <div className="bg-gray-800 p-4 md:p-6 rounded-lg shadow-lg mt-4 md:mt-6">
           <h2 className="text-lg md:text-xl font-semibold text-white mb-4">
@@ -108,7 +128,7 @@ const HotelDashboardUi = () => {
 
         {/* Latest Bookings Section */}
         <div className="mt-4 md:mt-6">
-      
+          {/* Add your latest bookings table or list here */}
         </div>
       </div>
     </div>

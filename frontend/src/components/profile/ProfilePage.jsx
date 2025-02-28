@@ -69,7 +69,7 @@ const ProfilePage = () => {
   return (
     <>
       <Navbar />
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-gray-900 to-gray-700 p-6">
+      <div className="flex flex-col items-center justify-center min-h-screen bg-[#0b1633] p-6">
         <div className="relative w-full md:mb-72 max-w-4xl bg-white/10 backdrop-blur-lg rounded-2xl shadow-lg p-8 text-white border border-white/20 mt-4">
           
           {/* Buttons - Positioned Top Right */}

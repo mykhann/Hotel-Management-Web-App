@@ -12,7 +12,7 @@ import { FaPhone } from "react-icons/fa";
 
 const ITEMS_PER_PAGE = 10;
 
-const HotelCard = () => {
+const HotelList = () => {
   useFetchAllHotels();
   const hotels = useSelector((state) => state.hotel.hotels);
   const user = useSelector((state) => state.auth.user);
@@ -111,7 +111,7 @@ const HotelCard = () => {
   return (
     <>
       <Navbar />
-      <div className="flex flex-col items-center gap-4 p-4 bg-gray-900 min-h-screen">
+      <div className="flex flex-col items-center gap-4 p-4 bg-[#0b1633] min-h-screen">
         <input
           type="text"
           placeholder="Search by hotel name or location..."
@@ -123,7 +123,7 @@ const HotelCard = () => {
           currentHotels.map((hotel) => (
             <div
               key={hotel._id}
-              className="w-full max-w-3xl flex bg-gray-800 text-white shadow-md rounded-lg overflow-hidden border-2 border-transparent transition-all duration-300 hover:border-yellow-500 relative"
+              className="w-full max-w-3xl flex bg-[#0f1d44] text-white shadow-md rounded-lg overflow-hidden border-2 border-transparent transition-all duration-300 hover:border-yellow-500 relative"
             >
               {user?.role === "admin" && (
                 <button
@@ -219,4 +219,4 @@ const HotelCard = () => {
   );
 };
 
-export default HotelCard;
+export default HotelList;

@@ -62,7 +62,7 @@ const BookingHistory = () => {
         <SideNavbar handleLogout={handleLogout} />
       )}
 
-      <div className="flex flex-col items-center gap-4 p-4 bg-gray-900 min-h-screen">
+      <div className="flex flex-col items-center gap-4 p-4 bg-[#0b1633] min-h-screen">
         <h2 className="text-2xl font-bold text-white mb-8">Booking History</h2>
         {bookings.length === 0 ? (
           <p className="text-center text-gray-400">No bookings found</p>
@@ -70,7 +70,7 @@ const BookingHistory = () => {
           bookings.map((booking) => (
             <div
               key={booking._id}
-              className="w-full max-w-3xl flex bg-gray-800 text-white shadow-md rounded-lg overflow-hidden border-2 border-transparent transition-all duration-300 hover:border-red-500"
+              className="w-full max-w-3xl flex bg-[#0f1d44] text-white shadow-md rounded-lg overflow-hidden border-2 border-transparent transition-all duration-300 hover:border-red-500"
             >
               <img
                 src={

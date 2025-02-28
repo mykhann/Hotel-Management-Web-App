@@ -4,11 +4,11 @@ import Footer from "./Footer";
 
 const AboutPage = () => {
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
+    <div className="min-h-screen bg-[#0b1633] text-white">
       <Navbar />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* About Us Section */}
-        <section className="bg-gray-800 rounded-xl shadow-lg p-8 mb-12">
+        <section className="bg-[#0f1d44] rounded-xl shadow-lg p-8 mb-12">
           <h2 className="text-4xl font-bold text-center text-yellow-400 mb-6">
             About Us
           </h2>
@@ -18,7 +18,7 @@ const AboutPage = () => {
         </section>
 
         {/* Mission Statement */}
-        <section className="bg-gray-800 rounded-xl shadow-lg p-8 mb-12">
+        <section className="bg-[#0f1d44] rounded-xl shadow-lg p-8 mb-12">
           <h2 className="text-4xl font-bold text-center text-yellow-400 mb-6">
             Our Mission
           </h2>
@@ -28,7 +28,7 @@ const AboutPage = () => {
         </section>
 
         {/* Our Strengths */}
-        <section className="bg-gray-800 rounded-xl shadow-lg p-8 mb-12">
+        <section className="bg-[#0f1d44] rounded-xl shadow-lg p-8 mb-12">
           <h2 className="text-4xl font-bold text-center text-yellow-400 mb-6">
             Why Choose Us?
           </h2>
@@ -64,7 +64,7 @@ const AboutPage = () => {
         </section>
 
         {/* Our Story */}
-        <section className="bg-gray-800 rounded-xl shadow-lg p-8 mb-12">
+        <section className="bg-[#0f1d44]rounded-xl shadow-lg p-8 mb-12">
           <h2 className="text-4xl font-bold text-center text-yellow-400 mb-6">
             Our Story
           </h2>
