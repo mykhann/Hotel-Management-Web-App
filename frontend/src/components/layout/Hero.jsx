@@ -1,18 +1,19 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import HotelList from "../Hotel/HotelList";
 
 const Hero = () => {
   return (
     <>
-      <section className="relative flex items-center justify-center h-screen bg-[#1d3c92] text-white overflow-hidden">
+      <section className="relative flex items-center justify-center h-screen bg-[#0b1633] text-white overflow-hidden">
      
         {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-gray-900/90 to-gray-900/50"></div>
+        <div className="absolute inset-0 "></div>
 
         {/* Content Overlay */}
         <div className="relative z-10 text-center max-w-4xl px-4">
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 animate-fade-in-up">
-            Welcome to <span className="text-yellow-400">Grand Horizon</span>
+            Welcome to <span className="text-yellow-400">Hotel Name</span>
           </h1>
           <p className="text-lg md:text-xl lg:text-2xl mb-8 text-gray-300 animate-fade-in-up delay-100">
             Experience unparalleled luxury and comfort at our world-class hotel. Your perfect getaway starts here.
@@ -30,7 +31,7 @@ const Hero = () => {
             </Link>
           </div>
         </div>
-
+        
         {/* Scrolling Indicator */}
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
           <svg
@@ -49,6 +50,7 @@ const Hero = () => {
           </svg>
         </div>
       </section>
+      <HotelList/>
 
       {/* Premium Features Section */}
       <section className="py-20 bg-[#0b1633]">

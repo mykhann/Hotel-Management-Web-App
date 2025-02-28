@@ -53,7 +53,7 @@ const AddHotel = () => {
     formData.append("ownerName", input.ownerName);
     formData.append("ownerEmail", input.ownerEmail);
     formData.append("ownerPassword", input.ownerPassword);
-
+   console.log(input.phone)
     if (input.image) {
       formData.append("image", input.image);
     }

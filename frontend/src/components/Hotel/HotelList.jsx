@@ -9,8 +9,12 @@ import useFetchAllHotels from "../../customHooks/useFetchAllHotels";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { FaPhone } from "react-icons/fa";
-
+import Modal from "react-modal"; 
+import { setHotels } from "../../reduxStore/HotelSlice";
 const ITEMS_PER_PAGE = 10;
+
+
+Modal.setAppElement("#root");
 
 const HotelList = () => {
   useFetchAllHotels();
@@ -20,16 +24,18 @@ const HotelList = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [ratings, setRatings] = useState({});
   const [bookings, setBookings] = useState([]);
+  const [showRatingPopup, setShowRatingPopup] = useState(false);
+  const [hotelToRate, setHotelToRate] = useState(null);
+  
   const navigate = useNavigate();
 
+  // Fetch bookings
   useEffect(() => {
     const fetchBookings = async () => {
       try {
         const response = await axios.get(
           "http://localhost:5500/api/v1/booking/get",
-          {
-            withCredentials: true,
-          }
+          { withCredentials: true }
         );
         setBookings(response.data.bookings);
       } catch (error) {
@@ -40,36 +46,41 @@ const HotelList = () => {
     fetchBookings();
   }, []);
 
-  const filteredHotels = hotels.filter(
-    (hotel) =>
-      hotel.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      hotel.location.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // Check for unrated hotels
+  useEffect(() => {
+    if (user && bookings.length > 0) {
+      // Find the first completed booking that hasn't been rated
+      const unratedBooking = bookings.find((booking) => {
+        const isCompleted = booking.status?.toLowerCase() === "completed";
+        const isRated = localStorage.getItem(`rated_${booking.hotel?._id}`);
+        return isCompleted && !isRated;
+      });
 
-  const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
-  const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
-  const currentHotels = filteredHotels.slice(indexOfFirstItem, indexOfLastItem);
+      if (unratedBooking) {
+        setHotelToRate(unratedBooking.hotel);
+        setShowRatingPopup(true);
+      }
+    }
+  }, [user, bookings]);
 
-  const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this hotel?")) return;
-
+  // Handle rating submission in the popup
+  const handleModalRating = async (newRating) => {
     try {
-      const response = await axios.delete(
-        `http://localhost:5500/api/v1/hotel/delete/${id}`,
-        {
-          withCredentials: true,
-        }
+      const response = await axios.post(
+        `http://localhost:5500/api/v1/rating/${hotelToRate._id}/rate`,
+        { rating: newRating },
+        { withCredentials: true }
       );
 
       if (response.data.success) {
-        toast.success(response.data.message);
-        window.location.reload();
-      } else {
-        throw new Error(response.data.message || "Failed to delete hotel");
+        toast.success("Thank you for your rating!");
+        
+        localStorage.setItem(`rated_${hotelToRate._id}`, "true");
+        setShowRatingPopup(false);
       }
     } catch (error) {
-      console.error("Error deleting hotel:", error);
-      toast.error(error.response?.data?.message || "Error deleting hotel");
+      toast.error("Failed to submit rating");
+      console.error("Rating error:", error);
     }
   };
 
@@ -93,32 +104,63 @@ const HotelList = () => {
     }
   };
 
+  // Check if the user has a completed booking for a specific hotel
   const hasCompletedBooking = (hotelId) => {
-    console.log("User ID from Redux:", user?._id);
-    console.log("Fetched Bookings:", bookings);
-
     return bookings.some((booking) => {
-      const isMatch =
+      return (
         booking.user._id?.toString() === user?._id?.toString() &&
         booking.hotel?._id?.toString() === hotelId?.toString() &&
-        booking.status?.toLowerCase() === "completed";
-
-      console.log("Does this booking match?", isMatch);
-      return isMatch;
+        booking.status?.toLowerCase() === "completed"
+      );
     });
   };
 
+  // Filter and paginate hotels
+  const filteredHotels = hotels.filter(
+    (hotel) =>
+      hotel.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      hotel.location.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+  const handleDelete = async (hotelId) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:5500/api/v1/hotel/delete/${hotelId}`,
+        { withCredentials: true }
+      );
+  
+      if (response.data.success) {
+        toast.success("Hotel deleted successfully!");
+        
+        // Update the state to remove the deleted hotel from the UI
+        setHotels((prevHotels) => prevHotels.filter((hotel) => hotel._id !== hotelId));
+      } else {
+        throw new Error("Failed to delete hotel");
+      }
+    } catch (error) {
+      console.error("Error deleting hotel:", error);
+      toast.error(error.response?.data?.message || "Error deleting hotel");
+    }
+  };
+  
+
+  const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
+  const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
+  const currentHotels = filteredHotels.slice(indexOfFirstItem, indexOfLastItem);
+
+
+
   return (
     <>
-      <Navbar />
+      {/* <Navbar /> */}
       <div className="flex flex-col items-center gap-4 p-4 bg-[#0b1633] min-h-screen">
-        <input
-          type="text"
-          placeholder="Search by hotel name or location..."
-          className="w-full max-w-md px-4 py-2 mb-4 text-black rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-500"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
+      <input
+  type="text"
+  placeholder="Search hotels by name or location..."
+  className="w-full md:mb-11 max-w-md px-5 py-3 text-black bg-white rounded-full border border-gray-300 shadow-md focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition duration-300 ease-in-out"
+  value={searchQuery}
+  onChange={(e) => setSearchQuery(e.target.value)}
+/>
+
         {currentHotels.length > 0 ? (
           currentHotels.map((hotel) => (
             <div
@@ -214,7 +256,38 @@ const HotelList = () => {
           )}
         </div>
       )}
-      <Footer />
+      {/* <Footer /> */}
+
+      {/* Rating Popup Modal */}
+      <Modal
+        isOpen={showRatingPopup}
+        onRequestClose={() => setShowRatingPopup(false)}
+        className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-lg shadow-xl w-96"
+        overlayClassName="fixed inset-0 bg-black bg-opacity-50"
+      >
+        <div className="text-center">
+          <h2 className="text-xl font-bold mb-4">Rate Your Stay</h2>
+          <p className="mb-4">
+            How would you rate your experience at<br />
+            <strong>{hotelToRate?.name}</strong>?
+          </p>
+          <div className="flex justify-center mb-6">
+            <ReactStars
+              count={5}
+              onChange={handleModalRating}
+              size={40}
+              activeColor="#ffd700"
+              isHalf={false}
+            />
+          </div>
+          <button
+            onClick={() => setShowRatingPopup(false)}
+            className="text-gray-500 hover:text-gray-700 underline"
+          >
+            Maybe later
+          </button>
+        </div>
+      </Modal>
     </>
   );
 };

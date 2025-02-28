@@ -24,7 +24,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="relative bg-[#0b1633] text-white shadow-lg py-6">
+    <nav className="relative bg-[#0e1c41] text-white shadow-lg py-6">
       <div className="container mx-auto flex items-center justify-between px-6">
         <Link to="/" className="text-3xl font-extrabold tracking-wide text-gray-100">
           LOGO HERE

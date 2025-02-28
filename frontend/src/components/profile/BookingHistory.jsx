@@ -58,14 +58,15 @@ const BookingHistory = () => {
   return (
     <>
       {user?.role === "user" && <Navbar />}
-      {user?.role === "hotelOwner" && (
-        <SideNavbar handleLogout={handleLogout} />
-      )}
+      {user?.role === "hotelOwner" && <SideNavbar handleLogout={handleLogout} />}
 
       <div className="flex flex-col items-center gap-4 p-4 bg-[#0b1633] min-h-screen">
         <h2 className="text-2xl font-bold text-white mb-8">Booking History</h2>
+
         {bookings.length === 0 ? (
-          <p className="text-center text-gray-400">No bookings found</p>
+          <div className="w-full max-w-3xl flex items-center justify-center bg-[#0f1d44] text-white shadow-md rounded-lg overflow-hidden border-2 border-transparent p-6">
+            <p className="text-center text-gray-400">No bookings found</p>
+          </div>
         ) : (
           bookings.map((booking) => (
             <div

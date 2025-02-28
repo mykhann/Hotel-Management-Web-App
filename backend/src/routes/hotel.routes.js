@@ -4,7 +4,7 @@ import { upload } from '../Middleware/multer.middleware.js';
 import { isAuthenticated } from '../Middleware/isAuthenticated.middleware.js';
 const router = new Router();
 
-router.post("/create", upload.single("image"), createHotel)
+router.post("/create", upload.single("image"),isAuthenticated, createHotel)
 router.get("/get/hotels", getAllHotels)
 router.get("/get/:id", getHotelByID)
 router.put("/update", isAuthenticated, upload.single("image"), updateHotel)

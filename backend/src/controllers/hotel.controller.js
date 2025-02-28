@@ -7,56 +7,75 @@ import { Room } from "../models/room.model.js";
 import bcrypt from "bcrypt"
 
 const createHotel = asyncHandler(async (req, res) => {
-    const { name, location, description, phone, email, ownerName, ownerEmail, ownerPassword } = req.body;
+    try {
+        
+        if (req.user.role !== "admin") {
+            return res.status(403).json({ success: false, message: "Not authorized to add  hotel" });
+        }
+    
+      
+       
+        const { name, location, description, phone, email, ownerName, ownerEmail, ownerPassword } = req.body;
 
-    if (!name || !location || !phone || !email || !ownerName || !ownerEmail || !ownerPassword) {
-        return res.status(400).json({ success: false, message: "Missing required fields" });
+        if (!name || !location || !phone || !email || !ownerName || !ownerEmail || !ownerPassword) {
+            console.log("Missing required fields:", { name, location, phone, email, ownerName, ownerEmail, ownerPassword });
+            return res.status(400).json({ success: false, message: "Missing required fields" });
+        }
+
+        // Check if owner email already exists
+        let hotelOwner = await User.findOne({ email: ownerEmail });
+
+        if (hotelOwner) {
+            return res.status(400).json({ success: false, message: "Hotel owner with this email already exists" });
+        }
+
+        let imageUrl = "";
+
+        if (req.file) {
+            const result = await uploadOnCloudinary(req.file.buffer, `hotels/${Date.now()}-${req.file.originalname}`);
+            imageUrl = result.secure_url;
+        }
+
+        // Hash password before saving
+        const hashedPassword = await bcrypt.hash(ownerPassword, 10);
+
+        // Create the hotel owner
+        hotelOwner = await User.create({
+            name: ownerName,
+            email: ownerEmail,
+            password: hashedPassword,
+            role: "hotelOwner",
+            username: ownerEmail.split("@")[0],
+            phone
+        });
+        console.log("Hotel owner created:", hotelOwner);
+
+        // Create the hotel & assign the owner
+        console.log("Creating hotel...");
+        const newHotel = await Hotel.create({
+            name,
+            location,
+            description,
+            phone,
+            email,
+            images: imageUrl ? [imageUrl] : [],
+            owner: hotelOwner._id,
+        });
+        console.log("Hotel created:", newHotel);
+
+        res.status(201).json({
+            success: true,
+            message: "Hotel created successfully & assigned to owner",
+            hotel: newHotel,
+            owner: { name: hotelOwner.name, email: hotelOwner.email },
+        });
+
+    } catch (error) {
+        console.error("Error in createHotel:", error);
+        res.status(500).json({ success: false, message: "Internal Server Error", error: error.message });
     }
-
-    // Check if owner email already exists
-    let hotelOwner = await User.findOne({ email: ownerEmail });
-
-    if (hotelOwner) {
-        return res.status(400).json({ success: false, message: "Hotel owner with this email already exists" });
-    }
-
-    let imageUrl = "";
-
-    if (req.file) {
-        const result = await uploadOnCloudinary(req.file.buffer, `hotels/${Date.now()}-${req.file.originalname}`);
-        imageUrl = result.secure_url;
-    }
-
-    // Hash password before saving
-    const hashedPassword = await bcrypt.hash(ownerPassword, 10);
-
-    // Create the hotel owner
-    hotelOwner = await User.create({
-        name: ownerName,
-        email: ownerEmail,
-        password: hashedPassword,
-        role: "hotelOwner",
-        username: ownerEmail.split("@")[0]
-    });
-
-    // Create the hotel & assign the owner
-    const newHotel = await Hotel.create({
-        name,
-        location,
-        description,
-        phone,
-        email,
-        images: imageUrl ? [imageUrl] : [],
-        owner: hotelOwner._id, // Link hotel to owner
-    });
-
-    res.status(201).json({
-        success: true,
-        message: "Hotel created successfully & assigned to owner",
-        hotel: newHotel,
-        owner: { name: hotelOwner.name, email: hotelOwner.email },
-    });
 });
+
 
 
 // get all hotels 
@@ -184,7 +203,7 @@ const getHotelInfo = asyncHandler(async (req, res) => {
         }
 
         hotel = await Hotel.findById(id).populate("owner", "name email");
-    } 
+    }
     // Hotel owner can fetch only their hotel
     else {
         hotel = await Hotel.findOne({ owner: req.user._id }).populate("owner", "name email");
@@ -231,4 +250,4 @@ const getHotelRooms = asyncHandler(async (req, res) => {
 
 
 
-export { createHotel, getAllHotels, getHotelByID, updateHotel, DeleteHotel, getHotelInfo,getHotelRooms };
+export { createHotel, getAllHotels, getHotelByID, updateHotel, DeleteHotel, getHotelInfo, getHotelRooms };

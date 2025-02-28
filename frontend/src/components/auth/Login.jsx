@@ -42,8 +42,8 @@ const Login = () => {
   return (
     <>
       <Navbar />
-      <div className="flex items-center justify-center min-h-screen bg-gray-900">
-        <div className="bg-gray-800 p-8 rounded-xl shadow-2xl w-11/12 sm:w-96 md:w-1/2 lg:w-1/3 xl:w-1/4 mb-20">
+      <div className="flex items-center justify-center min-h-screen bg-[#0b1633]">
+        <div className="bg-[#0f1d44] p-8 rounded-xl shadow-2xl w-11/12 sm:w-96 md:w-1/2 lg:w-1/3 xl:w-1/4 mb-20">
           <h2 className="text-3xl font-bold mb-6 text-center text-yellow-400">Login</h2>
           <form onSubmit={submitHandler}>
             <div className="mb-6">
@@ -53,7 +53,7 @@ const Login = () => {
                 onChange={onChangeInput}
                 value={input.email}
                 placeholder="Enter your email address"
-                className="mt-1 block w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+                className="mt-1 block w-full p-3 bg-[#11214e] border border-yellow-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
                 required
               />
             </div>
@@ -64,7 +64,7 @@ const Login = () => {
                 onChange={onChangeInput}
                 name="password"
                 placeholder="Enter your password"
-                className="mt-1 block w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+                className="mt-1 block w-full p-3 bg-[#11214e] border border-yellow-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
                 required
               />
             </div>
