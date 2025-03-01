@@ -28,7 +28,7 @@ const LatestHotels = () => {
   };
 
   return (
-    <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
+    <div className="bg-[#0f1d44] p-6 rounded-lg shadow-lg">
       <h2 className="text-xl font-semibold text-white mb-4">Latest Hotels</h2>
 
       {loading && <p className="text-gray-400">Loading...</p>}
@@ -37,7 +37,7 @@ const LatestHotels = () => {
       {!loading && !error && (
         <ul className="space-y-3">
           {hotels.map((hotel, index) => (
-            <li key={hotel._id || index} className="flex items-center justify-between bg-gray-700 p-3 rounded-lg">
+            <li key={hotel._id || index} className="flex items-center justify-between bg-[#0d1938] p-3 rounded-lg">
               <span className="text-white">🏨 {hotel.name} - {hotel.location}</span>
               <span className="text-sm text-gray-400">{getTimeAgo(hotel.createdAt)}</span>
             </li>

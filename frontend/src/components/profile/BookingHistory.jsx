@@ -5,6 +5,7 @@ import { MapPinIcon, EnvelopeIcon } from "@heroicons/react/24/solid";
 import Navbar from "../shared/Navbar";
 import Footer from "../layout/Footer";
 import { useSelector } from "react-redux";
+import SideNavbarAdmin from "../Admin Dashboard/SideNavbarAdmin";
 
 const BookingHistory = () => {
   const [bookings, setBookings] = useState([]);
@@ -59,6 +60,7 @@ const BookingHistory = () => {
     <>
       {user?.role === "user" && <Navbar />}
       {user?.role === "hotelOwner" && <SideNavbar handleLogout={handleLogout} />}
+      {user?.role === "admin" && <SideNavbarAdmin handleLogout={handleLogout} />}
 
       <div className="flex flex-col items-center gap-4 p-4 bg-[#0b1633] min-h-screen">
         <h2 className="text-2xl font-bold text-white mb-8">Booking History</h2>
@@ -132,8 +134,8 @@ const BookingHistory = () => {
                 </div>
 
                 {/* Cancel Booking Button */}
-                {booking.status !== "Completed" &&
-                  booking.status !== "Cancelled" && (
+                {booking.status !== "completed" &&
+                  booking.status !== "cancelled" && (
                     <div className="flex justify-center mt-3">
                       <button
                         onClick={() => cancelBooking(booking._id)}

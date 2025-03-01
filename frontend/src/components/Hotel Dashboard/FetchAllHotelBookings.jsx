@@ -39,7 +39,8 @@ const FetchAllHotelBookings = () => {
   return (
     <>
       <SideNavbar />
-      <div className="flex flex-col items-center gap-4 p-4 bg-gray-900 min-h-screen">
+      <div className="flex flex-col items-center gap-4 p-4 bg-[#0b1633]
+ min-h-screen">
         <h2 className="text-2xl font-bold text-white mb-8">Room Bookings</h2>
         {loading ? (
           <div className="flex justify-center items-center h-64">
@@ -93,7 +94,6 @@ const BookingCard = ({ booking, cancelBooking }) => {
 
   const dispatch = useDispatch();
   const handleStatusChange = async (status) => {
-  
     try {
       const response = await axios.put(
         `http://localhost:5500/api/v1/booking/update-booking/${booking._id}`,
@@ -103,17 +103,20 @@ const BookingCard = ({ booking, cancelBooking }) => {
   
       toast.success(response.data.message);
   
-      // Dispatch Redux action to update booking status
+      setSelectedStatus(status);
+  
+      
       dispatch(setBooking({ bookingId: booking._id, status }));
     } catch (error) {
       console.error("Error updating booking status:", error);
       toast.error(error.response?.data?.message || "Error updating booking status");
     }
   };
-  
 
   return (
-    <div className="md:ml-28 w-full flex bg-gray-800 md:h-48 text-white shadow-md rounded-lg overflow-hidden border-2 border-transparent transition-all duration-300 hover:border-red-500 mb-4 p-3">
+    <div className="md:ml-28 w-full flex 
+bg-[#0f1d44]
+ md:h-48 text-white shadow-md rounded-lg overflow-hidden border-2 border-transparent transition-all duration-300 hover:border-red-500 mb-4 p-3">
       <div className="w-full p-2 flex flex-col justify-between">
         <div className="flex justify-between items-start">
           <p className="text-sm font-medium text-gray-300">
@@ -125,7 +128,8 @@ const BookingCard = ({ booking, cancelBooking }) => {
               onClick={() => setIsEditing(!isEditing)}
               />
             {isEditing && (
-              <div className="absolute right-0 mt-2 w-40 bg-gray-700 rounded-lg shadow-lg z-auto">
+              <div className="absolute right-0 mt-2 w-40 bg-[#1f3269]
+rounded-lg shadow-lg z-auto">
                 <ul>
                   {["pending", "confirmed", "cancelled", "completed"].map((status) => (
                     <li

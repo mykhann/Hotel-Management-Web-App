@@ -113,8 +113,8 @@ const AddRoom = () => {
   return (
     <>
       <SideNavbar />
-      <div className="min-h-screen bg-gray-900 text-white p-4 md:p-8">
-        <div className="max-w-2xl mx-auto bg-gray-800 rounded-lg shadow-lg p-6">
+      <div className="min-h-screen bg-[#0b1633] text-white p-4 md:p-8">
+        <div className="max-w-2xl mx-auto bg-[#0f1d44] rounded-lg shadow-lg p-6">
           <h1 className="text-2xl md:text-3xl font-bold mb-6 text-yellow-400 text-center">
             Add New Room
           </h1>
@@ -129,7 +129,7 @@ const AddRoom = () => {
                 name="type"
                 value={roomData.type}
                 onChange={handleInputChange}
-                className="mt-1 block w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-white"
+                className="mt-1 block w-full p-2 bg-[#0f1d44] border border-yellow-600 rounded-md text-white"
                 required
               >
                 <option value="" disabled>
@@ -144,8 +144,8 @@ const AddRoom = () => {
             </div>
 
             {/* Room Price */}
-            <div>
-              <label htmlFor="price" className="block text-sm font-medium text-gray-300">
+            <div className="">
+              <label htmlFor="price" className="block text-sm  font-medium text-gray-300">
                 Price per Night ($)
               </label>
               <input
@@ -154,7 +154,7 @@ const AddRoom = () => {
                 name="price"
                 value={roomData.price}
                 onChange={handleInputChange}
-                className="mt-1 block w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-white"
+                className="mt-1 block w-full p-2 bg-[#0f1d44]border border-yellow-600 rounded-md text-white"
                 required
               />
             </div>
@@ -173,7 +173,7 @@ const AddRoom = () => {
                       value={amenity}
                       checked={roomData.amenities.includes(amenity)}
                       onChange={handleAmenitiesChange}
-                      className="w-4 h-4 text-yellow-400 bg-gray-700 border-gray-600 rounded focus:ring-yellow-400"
+                      className="w-4 h-4 text-yellow-400 bg-[#0f1d44] border-yellow-600 rounded focus:ring-yellow-400"
                     />
                     <label htmlFor={amenity} className="text-sm text-gray-300">
                       {amenity}
@@ -194,7 +194,7 @@ const AddRoom = () => {
                 name="capacity"
                 value={roomData.capacity}
                 onChange={handleInputChange}
-                className="mt-1 block w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-white"
+                className="mt-1 block w-full p-2 bg-[#0f1d44] border border-yellow-600 rounded-md text-white"
                 required
               />
             </div>
@@ -209,7 +209,7 @@ const AddRoom = () => {
                 name="description"
                 value={roomData.description}
                 onChange={handleInputChange}
-                className="mt-1 block w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-white"
+                className="mt-1 block w-full p-2 bg-[#0f1d44] border border-yellow-600 rounded-md text-white"
                 rows="3"
                 required
               />

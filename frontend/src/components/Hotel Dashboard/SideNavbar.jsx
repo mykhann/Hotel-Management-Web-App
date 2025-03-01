@@ -35,7 +35,7 @@ const SideNavbar = () => {
 
       {/* Sidebar */}
       <div
-        className={`h-screen w-64 bg-gray-900 text-white fixed top-0 left-0 flex flex-col p-6 shadow-lg transition-transform transform ${
+        className={`h-screen w-64 bg-[#0b1633] text-white fixed top-0 left-0 flex flex-col p-6 shadow-lg transition-transform transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         } md:translate-x-0`}
       >

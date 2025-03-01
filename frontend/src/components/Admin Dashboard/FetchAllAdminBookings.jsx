@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { MapPinIcon } from "@heroicons/react/24/solid";
 import Navbar from "../shared/Navbar";
 import Footer from "../layout/Footer";
+import SideNavbarAdmin from "./SideNavbarAdmin";
 
 const FetchAllAdminBookings = () => {
   const [bookings, setBookings] = useState([]);
@@ -67,8 +68,8 @@ const FetchAllAdminBookings = () => {
 
   return (
     <>
-      <Navbar />
-      <div className="flex flex-col items-center gap-4 p-4 bg-gray-900 min-h-screen">
+      <SideNavbarAdmin/>
+      <div className="flex md:ml-52 flex-col items-center gap-4 p-4 bg-[#0b1633] min-h-screen">
         <h2 className="text-2xl font-bold text-white mb-8">Booking History</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-6xl">
           {/* Today's Bookings */}
@@ -103,7 +104,7 @@ const FetchAllAdminBookings = () => {
 
 const BookingCard = ({ booking, cancelBooking }) => {
   return (
-    <div className="w-full flex bg-gray-800 text-white shadow-md rounded-lg overflow-hidden border-2 border-transparent transition-all duration-300 hover:border-red-500 mb-4 p-3">
+    <div className="w-full flex bg-[#0f1d44] text-white shadow-md rounded-lg overflow-hidden border-2 border-transparent transition-all duration-300 hover:border-red-500 mb-4 p-3">
       <div className="w-full p-2 flex flex-col justify-between">
         {/* User Name */}
         <p className="text-sm font-medium text-gray-300">

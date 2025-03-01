@@ -51,10 +51,10 @@ const BookRoom = () => {
   return (
     <>
       <Navbar />
-      <div className="flex flex-col items-center p-8 bg-gray-900 min-h-screen text-white">
+      <div className="flex flex-col items-center p-8 bg-[#0b1633] min-h-screen text-white">
         <h1 className="text-3xl font-bold mb-8 text-yellow-400">Book Your Room</h1>
 
-        <div className="w-full max-w-2xl bg-gray-800 p-6 rounded-lg shadow-lg">
+        <div className="w-full max-w-2xl bg-[#0f1d44] p-6 rounded-lg shadow-lg">
           {/* Check-in Date */}
           <div className="mb-6">
             <label className="block text-sm font-medium text-gray-300 mb-2">
@@ -64,7 +64,7 @@ const BookRoom = () => {
               type="date"
               value={checkInDate}
               onChange={(e) => setCheckInDate(e.target.value)}
-              className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+              className="w-full p-3 bg-[#0f1d44] border border-yellow-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
               required
             />
           </div>
@@ -78,7 +78,7 @@ const BookRoom = () => {
               type="date"
               value={checkOutDate}
               onChange={(e) => setCheckOutDate(e.target.value)}
-              className="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+              className="w-full p-3 bg-[#0f1d44] border border-yellow-500 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
               required
             />
           </div>

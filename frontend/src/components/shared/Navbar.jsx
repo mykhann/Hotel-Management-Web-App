@@ -63,14 +63,17 @@ const Navbar = () => {
       </div>
 
       {isOpen && (
-        <div className="md:hidden bg-gray-900 text-white p-6 shadow-md space-y-4 text-center">
+        <div className="md:hidden bg-[#0f1d44]
+ text-white p-6 shadow-md space-y-4 text-center">
           <Link to="/hotels" className="block py-3 text-lg font-medium text-gray-300 hover:text-white transition"></Link>
           <Link to="/about" className="block py-3 text-lg font-medium text-gray-300 hover:text-white transition">About Us</Link>
           {user ? (
             <div className="space-y-3">
               <button
                 onClick={() => navigate("/profile")}
-                className="flex items-center justify-center w-full p-3 bg-gray-800 rounded-lg hover:bg-gray-700 transition"
+                className="flex items-center justify-center w-full p-3 bg-[#0f1d44]
+ rounded-lg hover:bg-[#0f1d44]
+ transition"
               >
                 <User className="h-6 w-6 mr-2" /> View Profile
               </button>

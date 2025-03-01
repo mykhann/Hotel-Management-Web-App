@@ -2,11 +2,14 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { FaHotel } from "react-icons/fa";
 import { useSelector } from "react-redux";
+import SideNavbarAdmin from "./SideNavbarAdmin";
 
 const AllHotels = () => {
   const hotels = useSelector((store) => store.hotel.hotels);
 
   return (
+   <>
+   
     <Link to="/admin/view-hotels">
       <div className="bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-blue-500/50 transition duration-300 transform hover:scale-105">
         <div className="flex flex-col items-center text-center">
@@ -20,6 +23,7 @@ const AllHotels = () => {
         </div>
       </div>
     </Link>
+   </>
   );
 };
 

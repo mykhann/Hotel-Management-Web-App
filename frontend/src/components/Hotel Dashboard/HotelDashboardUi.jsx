@@ -69,14 +69,14 @@ const HotelDashboardUi = () => {
   ];
 
   return (
-    <div className="flex flex-col md:flex-row bg-gradient-to-r bg-gray-900 min-h-screen">
+    <div className="flex flex-col md:flex-row bg-gradient-to-r bg-[#0b1633] min-h-screen">
       {/* SideNavbar */}
       <SideNavbar handleLogout={handleLogout} className="w-full md:w-64 fixed h-full" />
 
       {/* Main Content */}
       <div className="flex-1 p-4 md:p-6 md:ml-64 mt-16 md:mt-0">
         {/* Hotel Info Section */}
-        <div className="bg-gray-800 p-4 md:p-6 rounded-lg shadow-lg flex flex-col md:flex-row md:items-center md:justify-between">
+        <div className="bg-[#0f1d44] p-4 md:p-6 rounded-lg shadow-lg flex flex-col md:flex-row md:items-center md:justify-between">
           <Link to="/hotel/view-hotel">
             <div className="flex items-center">
               <img
@@ -97,7 +97,7 @@ const HotelDashboardUi = () => {
         </div>
 
         {/* Total Revenue Section */}
-        <div className="bg-gray-800 p-4 md:p-6 rounded-lg shadow-lg mt-4 md:mt-6">
+        <div className="bg-[#0f1d44] p-4 md:p-6 rounded-lg shadow-lg mt-4 md:mt-6">
           <h2 className="text-lg md:text-xl font-semibold text-white mb-4">
             Total Revenue
           </h2>
@@ -110,7 +110,7 @@ const HotelDashboardUi = () => {
         </div>
 
         {/* Booking Chart Section */}
-        <div className="bg-gray-800 p-4 md:p-6 rounded-lg shadow-lg mt-4 md:mt-6">
+        <div className="bg-[#0f1d44] p-4 md:p-6 rounded-lg shadow-lg mt-4 md:mt-6">
           <h2 className="text-lg md:text-xl font-semibold text-white mb-4">
             Bookings Overview
           </h2>

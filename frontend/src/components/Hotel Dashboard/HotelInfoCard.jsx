@@ -64,7 +64,7 @@ const HotelInfoCard = () => {
 
   return (
     <>
-      <div className="min-h-screen flex items-center justify-center bg-gray-900 p-4">
+      <div className="min-h-screen flex items-center justify-center bg-[#0b1633] p-4">
       <div className="z-50">
       <SideNavbar />
       </div>
@@ -75,7 +75,7 @@ const HotelInfoCard = () => {
         ) : error ? (
           <p className="text-center text-red-500">{error}</p>
         ) : (
-          <div className="w-full max-w-3xl flex flex-col md:flex-row bg-gray-800 text-white rounded-lg overflow-hidden shadow-lg transform transition-all duration-300 hover:shadow-2xl">
+          <div className="w-full max-w-3xl flex flex-col md:flex-row bg-[#0f1d44] text-white rounded-lg overflow-hidden shadow-lg transform transition-all duration-300 hover:shadow-2xl">
             {/* Hotel Image on the Left */}
             <div className="w-full md:w-1/3 relative">
               <img
@@ -92,11 +92,11 @@ const HotelInfoCard = () => {
             <div className="w-full md:w-2/3 p-6 flex flex-col justify-between">
               {isEditing ? (
                 <>
-                  <input type="text" name="name" value={formData.name} onChange={handleChange} className="w-full bg-gray-700 text-white p-2 mb-2 rounded" placeholder="Hotel Name" />
-                  <input type="text" name="location" value={formData.location} onChange={handleChange} className="w-full bg-gray-700 text-white p-2 mb-2 rounded" placeholder="Location" />
-                  <textarea name="description" value={formData.description} onChange={handleChange} className="w-full bg-gray-700 text-white p-2 mb-2 rounded" placeholder="Description" />
-                  <input type="email" name="email" value={formData.email} onChange={handleChange} className="w-full bg-gray-700 text-white p-2 mb-2 rounded" placeholder="Email" />
-                  <input type="text" name="phone" value={formData.phone} onChange={handleChange} className="w-full bg-gray-700 text-white p-2 mb-2 rounded" placeholder="Phone" />
+                  <input type="text" name="name" value={formData.name} onChange={handleChange} className="w-full bg-[#152961] text-white p-2 mb-2 rounded" placeholder="Hotel Name" />
+                  <input type="text" name="location" value={formData.location} onChange={handleChange} className="w-full bg-[#152961] text-white p-2 mb-2 rounded" placeholder="Location" />
+                  <textarea name="description" value={formData.description} onChange={handleChange} className="w-full bg-[#152961] text-white p-2 mb-2 rounded" placeholder="Description" />
+                  <input type="email" name="email" value={formData.email} onChange={handleChange} className="w-full bg-[#152961] text-white p-2 mb-2 rounded" placeholder="Email" />
+                  <input type="text" name="phone" value={formData.phone} onChange={handleChange} className="w-full bg-[#152961] text-white p-2 mb-2 rounded" placeholder="Phone" />
                   <div className="flex items-center gap-2 mb-4">
                     <label className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded cursor-pointer">
                       <span>Choose Image</span>

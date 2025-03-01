@@ -35,7 +35,7 @@ const LatestBookings = () => {
   };
 
   return (
-    <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
+    <div className="bg-[#0f1d44] p-6 rounded-lg shadow-lg">
       <h2 className="text-xl font-semibold text-white mb-4">Latest Bookings</h2>
 
       {loading ? (
@@ -45,7 +45,8 @@ const LatestBookings = () => {
       ) : bookings.length > 0 ? (
         <ul className="space-y-3">
           {bookings.map((booking) => (
-            <li key={booking._id} className="flex items-center justify-between bg-gray-700 p-3 rounded-lg">
+            <li key={booking._id} className="flex items-center justify-between bg-[#09132f]
+ p-3 rounded-lg">
               <span className="text-white">📅 {booking.user?.name} - {booking.room?.type} Room ({booking.room?.hotel?.name})</span>
               <span className="text-sm text-gray-400">{getTimeAgo(booking.createdAt)}</span>
             </li>

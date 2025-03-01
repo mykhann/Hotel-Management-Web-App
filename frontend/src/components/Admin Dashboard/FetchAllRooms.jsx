@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { MapPinIcon, UserIcon, CurrencyDollarIcon, TrashIcon } from "@heroicons/react/24/solid";
-import Navbar from "../shared/Navbar";
+import {  UserIcon, CurrencyDollarIcon, TrashIcon } from "@heroicons/react/24/solid";
 import Footer from "../layout/Footer";
+import SideNavbarAdmin from "./SideNavbarAdmin";
 
 const AllRooms = () => {
   const [rooms, setRooms] = useState([]);
@@ -54,8 +54,8 @@ const AllRooms = () => {
 
   return (
     <>
-      <Navbar />
-      <div className="flex flex-col items-center gap-4 p-4 bg-gray-900 min-h-screen">
+      <SideNavbarAdmin />
+      <div className="flex flex-col items-center gap-4 p-4 bg-[#0b1633] min-h-screen">
         <h2 className="text-2xl font-bold text-white mb-8">All Rooms</h2>
         {Object.keys(groupedRooms).length === 0 ? (
           <p className="text-center text-gray-400">No rooms found</p>

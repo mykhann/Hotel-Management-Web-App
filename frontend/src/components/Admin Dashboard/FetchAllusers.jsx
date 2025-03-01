@@ -3,6 +3,7 @@ import { UserIcon, EnvelopeIcon } from "@heroicons/react/24/solid";
 import Navbar from "../shared/Navbar";
 import Footer from "../layout/Footer";
 import axios from "axios";
+import SideNavbarAdmin from "./SideNavbarAdmin";
 
 const FetchAllUsers = () => {
   const [users, setUsers] = useState([]);
@@ -47,8 +48,8 @@ const FetchAllUsers = () => {
 
   return (
     <>
-      <Navbar />
-      <div className="p-4 bg-gray-900 min-h-screen">
+      <SideNavbarAdmin />
+      <div className="p-4 md:ml-64 bg-[#0b1633] min-h-screen">
         <h1 className="text-3xl font-bold text-center text-white mb-8">
           All Users
         </h1>
@@ -58,7 +59,7 @@ const FetchAllUsers = () => {
           <input
             type="text"
             placeholder="Search by name or email..."
-            className="w-full max-w-md px-4 py-2 bg-gray-800 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
+            className="w-full max-w-md px-4 py-2 bg-[#11214e] text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -102,14 +103,14 @@ const FetchAllUsers = () => {
           <p className="text-gray-400 text-center mt-4">No matching users found.</p>
         )}
       </div>
-      <Footer />
+      
     </>
   );
 };
 
 const UserCategory = ({ title, users, visibleCount, setVisibleCount }) => {
   return (
-    <div className="bg-gray-800 p-4 rounded-lg">
+    <div className="bg-[#0b1633]  p-4 rounded-lg">
       <h2 className="text-xl font-semibold text-white mb-4">{title}</h2>
 
       {users.slice(0, visibleCount).map((user) => (
@@ -133,7 +134,7 @@ const UserCategory = ({ title, users, visibleCount, setVisibleCount }) => {
 const UserCard = ({ user }) => {
   console.log("User Data:", user);
   return (
-    <div className="flex bg-gray-700 text-white shadow-md rounded-lg overflow-hidden mb-4 p-3 hover:border-yellow-500 border-2 border-transparent transition-all duration-300">
+    <div className="flex bg-[#10204d]  text-white shadow-md rounded-lg overflow-hidden mb-4 p-3 hover:border-yellow-500 border-2 border-transparent transition-all duration-300">
       <UserIcon className="w-10 h-10 text-gray-400 mr-4" />
       <div>
         <h3 className="text-lg font-semibold">{user.name || user.username}</h3>

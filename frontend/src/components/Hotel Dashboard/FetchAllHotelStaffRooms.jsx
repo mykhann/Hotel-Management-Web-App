@@ -139,7 +139,7 @@ const FetchAllHotelStaffRooms = () => {
   return (
     <>
       
-      <div className="flex flex-col items-center p-8 bg-gray-900 min-h-screen text-white">
+      <div className="flex flex-col items-center p-8 bg-[#0b1633] min-h-screen text-white">
         <div className="z-50">
         <SideNavbar />
         </div>
@@ -157,7 +157,7 @@ const FetchAllHotelStaffRooms = () => {
 
               <div className="flex md:ml-32 flex-col gap-8">
                 {rooms.map((room) => (
-                  <div key={room._id} className="bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 relative">
+                  <div key={room._id} className="bg-[#0f1d44] p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 relative">
                     {/* Delete Button */}
                     {user?.role === 'hotelOwner' && (
                       <button
@@ -204,14 +204,14 @@ const FetchAllHotelStaffRooms = () => {
                               name="name"
                               value={editFormData.name}
                               onChange={handleEditFormChange}
-                              className="p-2 bg-gray-700 text-white rounded"
+                              className="p-2 bg-[#14285d] text-white rounded"
                               placeholder="Room Name"
                             />
                             <textarea
                               name="description"
                               value={editFormData.description}
                               onChange={handleEditFormChange}
-                              className="p-2 bg-gray-700 text-white rounded"
+                              className="p-2 bg-[#14285d] text-white rounded"
                               placeholder="Room Description"
                             />
                             <input
@@ -219,7 +219,7 @@ const FetchAllHotelStaffRooms = () => {
                               name="type"
                               value={editFormData.type}
                               onChange={handleEditFormChange}
-                              className="p-2 bg-gray-700 text-white rounded"
+                              className="p-2 bg-[#14285d] text-white rounded"
                               placeholder="Room Type"
                             />
                             <input
@@ -227,7 +227,7 @@ const FetchAllHotelStaffRooms = () => {
                               name="price"
                               value={editFormData.price}
                               onChange={handleEditFormChange}
-                              className="p-2 bg-gray-700 text-white rounded"
+                              className="p-2 bg-[#14285d] text-white rounded"
                               placeholder="Room Price"
                             />
                             <input
@@ -240,7 +240,7 @@ const FetchAllHotelStaffRooms = () => {
                                   amenities: e.target.value.split(", "),
                                 })
                               }
-                              className="p-2 bg-gray-700 text-white rounded"
+                              className="p-2 bg-[#14285d] text-white rounded"
                               placeholder="Amenities (comma separated)"
                             />
                             <button
@@ -252,7 +252,7 @@ const FetchAllHotelStaffRooms = () => {
                             <button
                               type="button"
                               onClick={() => setEditingRoom(null)}
-                              className="bg-gray-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-gray-700 transition-colors duration-200"
+                              className="bg-[#0f1d44] text-white px-6 py-2 rounded-lg font-semibold hover:bg-[#1a2851] transition-colors duration-200"
                             >
                               Cancel
                             </button>

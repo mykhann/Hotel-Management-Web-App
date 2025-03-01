@@ -69,7 +69,7 @@ const HotelRooms = () => {
   return (
     <>
       <Navbar />
-      <div className="flex flex-col items-center p-8 bg-gray-900 min-h-screen text-white">
+      <div className="flex flex-col items-center p-8 bg-[#0b1633] min-h-screen text-white">
         <h1 className="text-3xl font-bold mb-8 text-yellow-400">
           Rooms for Hotel
         </h1>
@@ -86,7 +86,7 @@ const HotelRooms = () => {
                 {rooms.map((room) => (
                   <div
                     key={room._id}
-                    className="bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
+                    className="bg-[#0f1d44] p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
                   >
                     <div className="flex flex-col md:flex-row gap-6">
                       {/* Image Section */}
