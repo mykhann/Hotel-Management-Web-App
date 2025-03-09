@@ -29,7 +29,7 @@ const HotelList = () => {
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        console.log("[DEBUG] Fetching bookings...");
+       
         const response = await axios.get(
           "http://localhost:5500/api/v1/booking/get",
           { withCredentials: true }
@@ -121,12 +121,7 @@ const HotelList = () => {
 
   return (
     <>
-      {/* Debug overlay */}
-      <div className="fixed bottom-0 left-0 p-4 bg-black text-white text-xs z-50">
-        <h3>Debug Info:</h3>
-        <p>Bookings loaded: {bookings.length}</p>
-        <p>Current user: {user?._id}</p>
-      </div>
+     
 
       {user?.role === "admin" && <SideNavbarAdmin />}
       <div className="flex flex-col items-center gap-4 p-4 bg-[#0b1633] min-h-screen">

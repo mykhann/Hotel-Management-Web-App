@@ -1,17 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../../reduxStore/authSlice";
 import { toast } from "react-toastify";
 import LatestBookings from "./LatestBookings";
 import LatestHotels from "./LatestHotels";
-import AllRooms from "./Allrooms";
-import AllBookings from "./AllBookings";
-import AllUsers from "./AllUsers";
-import AllHotels from "./AllHotels";
 import SideNavbarAdmin from "./SideNavbarAdmin";
 
 const AdminDashboard = () => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { user } = useSelector((store) => store.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -23,29 +20,58 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="flex">
+    <div className="relative min-h-screen bg-[#0b1633]">
+      {/* Mobile Hamburger Button */}
+      <button
+        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+        className="fixed top-4 left-4 z-50 p-2 bg-[#0b1633] text-white rounded-md md:hidden"
+      >
+        <svg
+          className="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M4 6h16M4 12h16M4 18h16"
+          />
+        </svg>
+      </button>
+
       {/* Sidebar */}
-      <SideNavbarAdmin handleLogout={handleLogout} />
+      <div
+      
+      >
+        <SideNavbarAdmin handleLogout={handleLogout} />
+      </div>
+
+      {/* Overlay for Mobile */}
+      {isSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-20 md:hidden"
+          onClick={() => setIsSidebarOpen(false)}
+        ></div>
+      )}
 
       {/* Main Content */}
-      <div className="ml-64 p-6 bg-[#0b1633] min-h-screen w-full">
+      <div
+        className={`
+          flex-1 px-4 py-6 md:px-8 lg:px-10 
+          transition-all duration-300
+          ${isSidebarOpen ? "ml-64" : "ml-0"}  
+          
+        `}
+      >
         {/* Header */}
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-white">
-            Admin Dashboard
-          </h1>
+        <div className="flex items-center mb-8">
+       
         </div>
 
-        {/* Admin Options Grid */}
-        {/* <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
-          <AllHotels />
-          <AllUsers />
-          <AllBookings />
-          <AllRooms />
-        </div> */}
-
-        {/* Admin Dashboard Sections */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Dashboard Sections */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
           <LatestHotels />
           <LatestBookings />
         </div>

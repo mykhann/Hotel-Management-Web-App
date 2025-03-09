@@ -28,6 +28,8 @@ import FetchAllHotelStaffRooms from "./components/Hotel Dashboard/FetchAllHotelS
 import FetchAllHotelBookings from "./components/Hotel Dashboard/FetchAllHotelBookings";
 import HotelInfoCard from "./components/Hotel Dashboard/HotelInfoCard";
 import AddRoom from "./components/Hotel Dashboard/AddRoom.jsx";
+import AdminLayout from "./components/Admin Dashboard/AdminLayout.jsx";
+import ProtectedRoute from "./components/Admin Dashboard/ProtectedRoute.jsx";
 
 // Error Boundary Component
 const ErrorPage = () => {
@@ -70,12 +72,26 @@ const router = createBrowserRouter([
   { path: "/book/:roomId", element: <BookRoom />, errorElement: <ErrorPage /> },
 
   // Admin Dashboard 
-  { path: "/admin", element: <AdminDashboard />, errorElement: <ErrorPage /> },
-  { path: "/admin/add-hotel", element: <AddHotel />, errorElement: <ErrorPage /> },
-  { path: "/admin/view-hotels", element: <HotelList />, errorElement: <ErrorPage /> },
-  { path: "/admin/view-users", element: <FetchAllusers />, errorElement: <ErrorPage /> },
-  { path: "/admin/view-bookings", element: <FetchAllAdminBookings />, errorElement: <ErrorPage /> },
-  { path: "/admin/view-rooms", element: <FetchAllRooms />, errorElement: <ErrorPage /> },
+  {
+    
+    element: <ProtectedRoute/>,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        path: "/admin",
+        element: <AdminLayout />,
+        errorElement: <ErrorPage />,
+        children: [
+          { index: true, element: <AdminDashboard />, errorElement: <ErrorPage /> },
+          { path: "add-hotel", element: <AddHotel />, errorElement: <ErrorPage /> },
+          { path: "view-hotels", element: <HotelList />, errorElement: <ErrorPage /> },
+          { path: "view-users", element: <FetchAllusers />, errorElement: <ErrorPage /> },
+          { path: "view-bookings", element: <FetchAllAdminBookings />, errorElement: <ErrorPage /> },
+          { path: "view-rooms", element: <FetchAllRooms />, errorElement: <ErrorPage /> },
+        ],
+      },
+    ],
+  },
 
   // Hotel Dashboard 
   { path: "/hotel-dashboard", element: <HoteldashboardUi />, errorElement: <ErrorPage /> },

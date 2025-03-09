@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import {  UserIcon, CurrencyDollarIcon, TrashIcon } from "@heroicons/react/24/solid";
+import { UserIcon, CurrencyDollarIcon, TrashIcon } from "@heroicons/react/24/solid";
 import Footer from "../layout/Footer";
 import SideNavbarAdmin from "./SideNavbarAdmin";
 
@@ -9,6 +9,7 @@ const AllRooms = () => {
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [sidebarOpen, setSidebarOpen] = useState(true); // Track sidebar state
 
   useEffect(() => {
     fetchAllRooms();
@@ -54,8 +55,12 @@ const AllRooms = () => {
 
   return (
     <>
-      <SideNavbarAdmin />
-      <div className="flex flex-col items-center gap-4 p-4 bg-[#0b1633] min-h-screen">
+      <SideNavbarAdmin isOpen={sidebarOpen} setIsOpen={setSidebarOpen} />
+      <div
+        className={`flex flex-col items-center gap-4 p-4 bg-[#0b1633] min-h-screen transition-all ${
+          sidebarOpen ? "md:ml-64" : "ml-0"
+        }`}
+      >
         <h2 className="text-2xl font-bold text-white mb-8">All Rooms</h2>
         {Object.keys(groupedRooms).length === 0 ? (
           <p className="text-center text-gray-400">No rooms found</p>
@@ -83,32 +88,22 @@ const AllRooms = () => {
 
 const RoomCard = ({ room, onDelete }) => {
   return (
-    <div className="w-full flex flex-col bg-gray-800 text-white shadow-md rounded-lg overflow-hidden border-2 border-transparent transition-all duration-300 hover:border-red-500">
-      {/* Room Image */}
+    <div className="w-full flex flex-col bg-[#0f1d44] text-white shadow-md rounded-lg overflow-hidden border-2 border-transparent transition-all duration-300 hover:border-red-500">
       <img
-        src={room?.images?.[0] }
+        src={room?.images?.[0]}
         alt={room.hotel?.name || "Hotel Image"}
         className="w-full h-48 object-cover"
       />
-
-      {/* Room Details */}
       <div className="p-4 flex flex-col gap-2">
-        {/* Room Type */}
         <p className="text-lg font-semibold">Room: {room.type || "N/A"}</p>
-
-        {/* Price */}
         <div className="flex items-center gap-1 text-sm text-gray-300">
           <CurrencyDollarIcon className="w-4 h-4 text-green-500" />
           <p>Price: ${room.price || "N/A"}</p>
         </div>
-
-        {/* Capacity */}
         <div className="flex items-center gap-1 text-sm text-gray-300">
           <UserIcon className="w-4 h-4 text-blue-500" />
           <p>Capacity: {room.capacity || "N/A"} guests</p>
         </div>
-
-        {/* Availability */}
         <p className="text-sm text-gray-400">
           Status:{" "}
           <span
@@ -119,8 +114,6 @@ const RoomCard = ({ room, onDelete }) => {
             {room.isAvailable ? "Available" : "Booked"}
           </span>
         </p>
-
-        {/* Delete Button */}
         <button
           onClick={() => onDelete(room._id)}
           className="mt-3 flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded transition-all"
